@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const bcry0pt = require('bcrypt');
-import {isEmail} from ('validator');
+const bcrypt = require('bcrypt');
+const {isEmail} = require('validator');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -33,6 +33,7 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Password is required'],
         minlength: [8, 'Password must be at least 8 characters.']
     }
+
 }, {timestamps: true});
 
 //Middleware
@@ -48,7 +49,7 @@ UserSchema.pre('validate', function(next){
 })
 
 UserSchema.pre('save', function (next){
-    bcry0pt.hash(this.password, 10)
+    bcrypt.hash(this.password, 10)
         .then(hash => {
             this.password = hash;
             next();
