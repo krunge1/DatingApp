@@ -4,7 +4,7 @@ import testImg from "../assets/testImages/titann.jpg";
 
 const Dashboard = () => {
     return (
-        <div className="w-full h-screen">
+        <div>
             <div className="flex items-center justify-between px-8 py-8">
                 <div className="">
                     <div className="flex justify-center gap-1">
@@ -29,6 +29,8 @@ const Dashboard = () => {
                 <div className="justify-self-center">
                     {/* I PUT HEIGHT ON THE NEXT LINE JUST FOR REFERANCE */}
                     <div className="border border-red-500 w-[500px]  mx-2 my-2 justify-self-center py-4">
+                        {/* <div className=" bg-slate-50 rounded-xl w-[500px]  mx-2 my-2 justify-self-center py-4"> */}
+
                         <div>
                             <p className="text-secondary mx-8 text-lg font-bold">
                                 Your Blind Date Recommendation
