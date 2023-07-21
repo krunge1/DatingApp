@@ -9,8 +9,33 @@ import RegisterForm from "./components/RegisterForm";
 function App() {
     const [count, setCount] = useState(0);
 
+    let background = () => {
+        let res = "";
+        let number = Math.ceil(Math.random() * 5);
+        switch (number) {
+            case 1:
+                res = "bg-pink-50";
+                break;
+            case 2:
+                res = "bg-fuchsia-50";
+                break;
+            case 3:
+                res = "bg-sky-50";
+                break;
+            case 4:
+                res = "bg-teal-50";
+                break;
+            case 5:
+                res = "bg-lime-50";
+                break;
+            default:
+                console.log("There must be some issue");
+        }
+        return res;
+    };
+
     return (
-        <div className="bg-pink-50">
+        <div className={background()}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginForm />} />
@@ -18,7 +43,6 @@ function App() {
                     {/* <Route pathe="/dashboard" element={<HomePage/>}/> */}
                 </Routes>
             </BrowserRouter>
-            {/* <TestPage /> */}
         </div>
     );
 }

@@ -41,12 +41,15 @@ const RegisterForm = (props) => {
 
     return (
         <div className="w-full h-screen grow flex items-center justify-around">
-            <div className="mt-[5%]">
-                <div className="flex items-center gap-2 justify-end">
-                    <h1>Register</h1>
+            <div>
+                <div className="flex justify-center mb-16">
+                    <h1 className="justify-self-center">Blind Date</h1>
                     <span>
-                        <IconChatHeart className="text-4xl text-dText hover:scale-150 duration-200" />
+                        <IconChatHeart className="text-3xl text-dText hover:scale-150 duration-200" />
                     </span>
+                </div>
+                <div className="flex items-center gap-2 justify-end">
+                    <h2>Register</h2>
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -57,6 +60,7 @@ const RegisterForm = (props) => {
                             Name
                         </label>
                         <input
+                            className="text-dText"
                             type="text"
                             name="name"
                             value={formState.name}
@@ -72,6 +76,7 @@ const RegisterForm = (props) => {
                             Email
                         </label>
                         <input
+                            className="text-dText"
                             type="email"
                             name="email"
                             value={formState.email}
@@ -87,6 +92,7 @@ const RegisterForm = (props) => {
                             Birthdate
                         </label>
                         <input
+                            className="text-dText"
                             type="date"
                             name="birthdate"
                             value={formState.birthdate}
@@ -106,6 +112,7 @@ const RegisterForm = (props) => {
                             Password
                         </label>
                         <input
+                            className="text-dText"
                             type="password"
                             name="password"
                             value={formState.password}
@@ -121,6 +128,7 @@ const RegisterForm = (props) => {
                             Confirm Password
                         </label>
                         <input
+                            className="text-dText"
                             type="password"
                             name="confirmPassword"
                             value={formState.confirmPassword}
@@ -133,7 +141,7 @@ const RegisterForm = (props) => {
                         ""
                     )}
 
-                    <button className="primary mt-8" type="submit">
+                    <button className="primary mt-4" type="submit">
                         Register
                     </button>
                 </form>
