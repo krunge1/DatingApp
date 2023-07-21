@@ -10,7 +10,7 @@ function App() {
     const [count, setCount] = useState(0);
 
     return (
-        <div className="bg-pink-100">
+        <div className="bg-pink-50">
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginForm />} />
