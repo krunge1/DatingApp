@@ -11,7 +11,7 @@ function App() {
     const [count, setCount] = useState(0);
 
     return (
-        <div className={"bg-gradient-to-r from-rose-100 to-teal-50 "}>
+        <div>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginForm />} />

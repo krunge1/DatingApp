@@ -42,13 +42,13 @@ const RegisterForm = (props) => {
     return (
         <div className="w-full h-screen grow flex items-center justify-around">
             <div>
-                <div className="flex justify-center mb-16">
+                <div className="flex justify-center mb-16 gap-1">
                     <h1 className="justify-self-center">Blind Date</h1>
                     <span>
                         <IconChatHeart className="text-3xl text-dText hover:scale-150 duration-200" />
                     </span>
                 </div>
-                <div className="flex items-center gap-2 justify-end">
+                <div className="flex items-center gap-2 justify-end rotate-[353deg]">
                     <h2>Register</h2>
                 </div>
 

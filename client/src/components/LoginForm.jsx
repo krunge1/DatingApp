@@ -42,13 +42,13 @@ const RegisterForm = (props) => {
     return (
         <div className="w-full h-screen grow flex items-center justify-around">
             <div>
-                <div className="flex justify-center mb-8">
+                <div className="flex justify-center mb-8 gap-1">
                     <h1 className="justify-self-center">Blind Date</h1>
                     <span>
                         <IconChatHeart className="text-3xl text-dText hover:scale-150 duration-200" />
                     </span>
                 </div>
-                <div className="flex items-center gap-2 justify-end">
+                <div className="flex items-center gap-2 justify-end rotate-[353deg]">
                     <h2>Login</h2>
                 </div>
 
@@ -56,10 +56,11 @@ const RegisterForm = (props) => {
                     <div className="grid md:grid-cols-2 gap-4 w-full py-2">
                         <div>
                             <label
-                                className="text-dText/50 font-semibold text-sm"
+                                className="text-dText/50 font-semibold text-sm "
                                 htmlFor="email">
                                 Email
                             </label>
+
                             <input
                                 className="text-dText"
                                 type="email"
@@ -76,6 +77,7 @@ const RegisterForm = (props) => {
                                 htmlFor="password">
                                 Password
                             </label>
+
                             <input
                                 className="text-dText"
                                 type="password"
