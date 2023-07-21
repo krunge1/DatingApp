@@ -7,6 +7,7 @@ export default {
             colors: {
                 primary: "#faadbb",
                 secondary: "#da9dcb",
+                dText: "#c467a2",
             },
         },
     },

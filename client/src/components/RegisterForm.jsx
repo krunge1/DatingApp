@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import IconChatHeart from "../assets/icons/HeartIcon";
 
 const RegisterForm = (props) => {
     const navigate = useNavigate();
@@ -39,13 +40,22 @@ const RegisterForm = (props) => {
     };
 
     return (
-        <div className="mt-4 grow flex items-center justify-around">
-            <div className="mt-64">
-                <h1>Register</h1>
+        <div className="w-full h-screen grow flex items-center justify-around">
+            <div className="mt-[5%]">
+                <div className="flex items-center gap-2 justify-end">
+                    <h1>Register</h1>
+                    <span>
+                        <IconChatHeart className="text-4xl text-dText hover:scale-150 duration-200" />
+                    </span>
+                </div>
 
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="name">Name</label>
+                        <label
+                            className="text-dText/50 font-semibold text-sm"
+                            htmlFor="name">
+                            Name
+                        </label>
                         <input
                             type="text"
                             name="name"
@@ -56,7 +66,11 @@ const RegisterForm = (props) => {
                     {errors.name ? <p> {errors.name.message} </p> : ""}
 
                     <div>
-                        <label htmlFor="email">Email</label>
+                        <label
+                            className="text-dText/50 font-semibold text-sm"
+                            htmlFor="email">
+                            Email
+                        </label>
                         <input
                             type="email"
                             name="email"
@@ -67,7 +81,11 @@ const RegisterForm = (props) => {
                     {errors.email ? <p> {errors.email.message} </p> : ""}
 
                     <div>
-                        <label htmlFor="birthdate">Birthdate</label>
+                        <label
+                            className="text-dText/50 font-semibold text-sm"
+                            htmlFor="birthdate">
+                            Birthdate
+                        </label>
                         <input
                             type="date"
                             name="birthdate"
@@ -82,7 +100,11 @@ const RegisterForm = (props) => {
                     )}
 
                     <div>
-                        <label htmlFor="password">Password</label>
+                        <label
+                            className="text-dText/50 font-semibold text-sm"
+                            htmlFor="password">
+                            Password
+                        </label>
                         <input
                             type="password"
                             name="password"
@@ -93,7 +115,9 @@ const RegisterForm = (props) => {
                     {errors.password ? <p> {errors.password.message} </p> : ""}
 
                     <div>
-                        <label htmlFor="confirmPassword">
+                        <label
+                            className="text-dText/50 font-semibold text-sm"
+                            htmlFor="confirmPassword">
                             Confirm Password
                         </label>
                         <input
@@ -109,7 +133,7 @@ const RegisterForm = (props) => {
                         ""
                     )}
 
-                    <button className="primary" type="submit">
+                    <button className="primary mt-8" type="submit">
                         Register
                     </button>
                 </form>
