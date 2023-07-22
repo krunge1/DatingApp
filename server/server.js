@@ -12,5 +12,6 @@ app.use(cors({origin: process.env.ORIGIN_PORT, credentials: true}));
 app.use(cookieParser())
 
 require("./routes/User.routes")(app);
+require("./routes/Profile.routes")(app);
 
 app.listen(process.env.DB_PORT, () => console.log("The server is all fired up"));
