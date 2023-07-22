@@ -22,7 +22,7 @@ const CreateProfile = () => {
             </div>
             <form action="" className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
-                <div className=" bg-gray-100 h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
+                <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
                         htmlFor="email">
@@ -30,7 +30,7 @@ const CreateProfile = () => {
                     </label>
                     <textarea name="" id="" cols="30" rows="5"></textarea>
                 </div>
-                <div className=" bg-gray-100 justify-around m-auto flex items-center gap-4 my-2  max-w-[780px]">
+                <div className="justify-around m-auto flex items-center gap-4 my-2  max-w-[780px]">
                     <h3
                         className="text-dText/50 font-semibold text-md mr-4"
                         htmlFor="email">
@@ -67,10 +67,8 @@ const CreateProfile = () => {
                         </div>
                     </div>
                 </div>
-                <div className=" bg-gray-100 justify-around m-auto flex items-center gap-4 my-2 max-w-[780px]">
-                    <h3
-                        className="text-dText/50 font-semibold text-md mr-4"
-                        htmlFor="email">
+                <div className="justify-around m-auto flex items-center gap-4 my-2 max-w-[780px]">
+                    <h3 className="text-dText/50 font-semibold text-md mr-4">
                         Sexual&nbsp;Orientation
                     </h3>
                     <div className="grid sm:grid-cols-2 md:grid-cols-4">
@@ -158,8 +156,7 @@ const CreateProfile = () => {
                 </div>
                 <div className="PHOTO">
                     <div className="items-center grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto mt-4">
-                        {/* RED BORDER WILL BE REMOVED */}
-                        <div className="border border-red-500 w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
                             <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
                                 <img
                                     src={testImg}
@@ -168,7 +165,7 @@ const CreateProfile = () => {
                                 />
                             </div>
                         </div>
-                        <div className="border border-red-500 w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
                             <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
                                 <img
                                     src={testImg}
@@ -177,7 +174,7 @@ const CreateProfile = () => {
                                 />
                             </div>
                         </div>
-                        <div className="border border-red-500 w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
                             <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
                                 <img
                                     src={testImg}
@@ -186,7 +183,7 @@ const CreateProfile = () => {
                                 />
                             </div>
                         </div>
-                        <div className="border border-red-500 w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
                             <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
                                 <img
                                     src={testImg}
@@ -194,6 +191,70 @@ const CreateProfile = () => {
                                     className="object-cover rounded-xl w-full"
                                 />
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="max-w-[920px] flex flex-col m-auto">
+                    <div className="flex items-center gap-2 ">
+                        <input className="text-dText" type="text" name="name" />
+                        <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                            <div className="cursor-pointer hover:scale-110 duration-200">
+                                <span className="text-dText font-bold">
+                                    Browser
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="  justify-around m-auto items-center gap-4 my-2 max-w-[780px]">
+                    <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">
+                        Interests
+                    </h3>
+                    <div className="grid sm:grid-cols-2 md:grid-cols-6">
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="sport" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                sport
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="reading" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                reading
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="hiking" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                hiking
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="coding" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                coding
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="miniGolf" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                mini golf
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input type="checkbox" value="etc" />
+                            <label className="text-dText/50 font-semibold text-sm">
+                                etc
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-end mt-4">
+                    <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
+                        <div className="cursor-pointer hover:scale-110 duration-200 ">
+                            <span className="text-dText font-bold">
+                                Create Account
+                            </span>
                         </div>
                     </div>
                 </div>
