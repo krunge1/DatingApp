@@ -1,9 +1,10 @@
 import React from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
+import testImg from "../assets/testImages/titann.jpg";
 
 const Dashboard = () => {
     return (
-        <div className="w-full h-screen">
+        <div>
             <div className="flex items-center justify-between px-8 py-8">
                 <div className="">
                     <div className="flex justify-center gap-1">
@@ -23,11 +24,159 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className="items-center grid lg:grid-cols-2 mx-auto">
-                <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center"></div>
-                <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center"></div>
-                <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center"></div>
-                <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center"></div>
+
+            <div className="items-start grid lg:grid-cols-2 mx-auto">
+                <div className="justify-self-center">
+                    {/* I PUT HEIGHT ON THE NEXT LINE JUST FOR REFERANCE */}
+                    <div className="border border-red-500 w-[500px]  mx-2 my-2 justify-self-center py-4">
+                        {/* <div className=" bg-slate-50 rounded-xl w-[500px]  mx-2 my-2 justify-self-center py-4"> */}
+
+                        <div>
+                            <p className="text-secondary mx-8 text-lg font-bold">
+                                Your Blind Date Recommendation
+                            </p>
+                            <div className="items-center grid grid-cols-2 mx-auto mt-4">
+                                {/* BUT *THIS HEIGHT IS TO LIMITED THE HEIGHT OF PICTURE */}
+                                {/* THESE 6 DIVs SHOULD BE REDUCE TO ONLY 1 AND USE 'map' TO ITERATE  */}
+                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                    <h3 className="text-dText font-semibold text-sm">
+                                        Titann
+                                    </h3>
+                                </div>
+                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                    <h3 className="text-dText font-semibold text-sm">
+                                        Titann
+                                    </h3>
+                                </div>
+                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                    <h3 className="text-dText font-semibold text-sm">
+                                        Titann
+                                    </h3>
+                                </div>
+                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                    <h3 className="text-dText font-semibold text-sm">
+                                        Titann
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center py-4"></div>
+                </div>
+
+                <div className="justify-self-center">
+                    <div className="border border-red-500 w-[500px]  mx-2 my-2 justify-self-center py-4">
+                        <p className="text-secondary mx-8 text-lg font-bold ">
+                            Find New Friends
+                        </p>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div className="border border-red-500 w-[500px]  mx-2 my-2 justify-self-center py-4">
+                        <p className="text-secondary mx-8 text-lg font-bold ">
+                            FRIEND LIST
+                        </p>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
+                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                <img
+                                    src={testImg}
+                                    alt=""
+                                    className="object-cover rounded-xl w-full"
+                                />
+                            </div>
+                            <h3 className="text-dText font-semibold text-sm">
+                                Titann
+                            </h3>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
