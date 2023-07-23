@@ -7,6 +7,7 @@ import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
 import CreateProfile from "./components/CreateProfile";
+import Friends from "./components/Friends";
 
 function App() {
     const [count, setCount] = useState(0);
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/register" element={<RegisterForm />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<CreateProfile />} />
+                    <Route path="/friends/:id" element={<Friends />} />
                     {/* <Route pathe="/dashboard" element={<HomePage/>}/> */}
                 </Routes>
             </BrowserRouter>
