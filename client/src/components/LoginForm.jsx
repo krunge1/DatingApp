@@ -100,9 +100,12 @@ const RegisterForm = (props) => {
                     <span className="text-secondary">
                         Don't have an account?
                     </span>
-                    <span className="text-dText underline font-semibold">
+                    <span className="text-dText underline font-semibold" >
                         {" "}
-                        Register{" "}
+                        <a href="/register">
+                        Register
+                        </a>
+                        {" "}
                     </span>
                 </div>
             </div>
