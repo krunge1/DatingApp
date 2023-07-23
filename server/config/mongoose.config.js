@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose =  require('mongoose');
+require('dotenv').config();
 
-
-//ENTER THE NEW DATABASE NAME INTO THE ADDRESS
-mongoose.connect('mongodb://127.0.0.1:27017/dating_app_db', {
-    useNewUrlParser: true,
+mongoose.connect(process.env.MongoDBURL, {
+    useNewURLParser: true,
     useUnifiedTopology: true
 })
+
     .then(() => console.log('Established a connection to the database'))
-    .catch(err => console.log('Something went wrong when connecting to the database ', err));
+    .catch(err => console.log('Something went wrong when connecting to the database'))
