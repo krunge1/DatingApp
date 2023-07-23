@@ -71,6 +71,7 @@ module.exports = {
             Profile.findOne({_id: req.params.id})
             .then((oneProfile) =>{
                 res.json(oneProfile)
+                //Find All Friends by Profile data is available in this oneProfile object. Access friends by oneProfile.friend._id
             })
             .catch((err) =>{
                 res.status(500).json({message: 'Something went wrong', error: err})
@@ -79,7 +80,8 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-    //Update
+
+//Update
     updateProfile: async (req, res) => {
         try{
             const {userToken} = req.cookies;
@@ -110,8 +112,41 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-
-    
+    //Add Friend to Profile Model
+    addFriend: async (req, res) => {
+        try{
+            const {userToken} = req.cookies;
+            //Verify if logged in
+            if(!userToken){
+                return res.status(400).json({message: "User must be logged in"});
+            }
+            //Verify Token and get userID
+            const userData = await jwt.verify(userToken, secret);
+            const loggedInUserId = userData._id;
+            // Find the profile by ID and check if the logged-in user owns it
+            const profile = await Profile.findById(req.params.id);
+            // console.log(profile._id)
+            if (!profile) {
+                return res.status(400).json({ message: 'Profile not found' });
+            }
+            if(profile.user.toString() !== loggedInUserId){
+                return res.status(400).json({message: "User does not own profile."})
+            }
+            // Check if the friendId already exists in the friends array
+            friendId = req.params.friendId
+            // console.log(friendId)
+            const existingFriend = profile.friend.find((friend) => friend.toString() === friendId);
+            if (existingFriend) {
+                return res.status(400).json({message: 'Friend already added'});
+            }
+            profile.friend.push(friendId);
+            await profile.save();
+            res.json(profile);
+        }catch (err){
+            res.status(400).json({error: err})
+        }
+    },
+        
     // "photos" need to match with data.set("photos", files); in uploadPhoto() in MyTrail.jsx
     // 100 is the limit (can be any other number)
     uploadPhoto: async (req, res) => {
@@ -133,27 +168,10 @@ module.exports = {
                 return res.status(400).json({message: "User does not own profile."})
             }
             //if user owns, make update
-            const photoMidWare = multer({ dest: "uploads/" });
-            photoMidWare.array("photos", 100)
-            const uploadedFiles = [];
-            console.log(req.files);
-
-            for (let i = 0; i < req.files.length; i++) {
-                // console.log(req.files[i].mimetype.split("/")[0]);
-                if (req.files[i].mimetype.split("/")[0] === "image") {
-                    const { path, originalname } = req.files[i];
-                    const parts = originalname.split(".");
-                    const extension = parts[parts.length - 1];
-                    const newPath = `${path}.${extension}`;
-                    console.log(path + " " + newPath);
-                    fs.renameSync(path, newPath);
-                    console.log(newPath);
-                    uploadedFiles.push(newPath.replace("uploads/", "")); // ! NOTE
-                } else {
-                    res.status(400).json({ message: "File type not compatible" });
-                }
-            }
-            res.json(uploadedFiles);
+            const uploadedFiles = req.uploadedFiles;
+            profile.pictures.push(...uploadedFiles);
+            await profile.save();
+            res.json(profile);
         }catch (err){
             res.status(400).json({error: err})
         }
@@ -186,7 +204,77 @@ module.exports = {
         }catch (err){
             res.status(400).json({error: err})
         }
-    }
+    },
+    //Remove Friend from Profile
+    removeFriend: async (req, res) => {
+        try{
+            const {userToken} = req.cookies;
+            //Verify if logged in
+            if(!userToken){
+                return res.status(400).json({message: "User must be logged in"});
+            }
+            //Verify Token and get userID
+            const userData = await jwt.verify(userToken, secret);
+            const loggedInUserId = userData._id;
+            // Find the profile by ID and check if the logged-in user owns it
+            const profile = await Profile.findById(req.params.id);
+            // console.log(profile._id)
+            if (!profile) {
+                return res.status(400).json({ message: 'Profile not found' });
+            }
+            if(profile.user.toString() !== loggedInUserId){
+                return res.status(400).json({message: "User does not own profile."})
+            }
+            // Check if the friendId already exists in the friends array
+            friendId = req.params.friendId
+            const existingFriendIndex = profile.friend.findIndex((friend) => friend.toString() === friendId);
+            // console.log(existingFriendIndex)
+            if (existingFriendIndex === -1) {
+                return res.status(400).json({message: 'Friend not found'});
+            }
+            profile.friend.splice(existingFriendIndex, 1);
+            await profile.save();
+            res.json(profile);
+        }catch (err){
+            res.status(400).json({error: err})
+        }
+    },
+    removePhoto: async (req, res) => {
+        try {
+            const { userToken } = req.cookies;
+            // Verify if logged in
+            if (!userToken) {
+            return res.status(400).json({ message: 'User must be logged in' });
+            }
+            // Verify Token and get userID
+            const userData = await jwt.verify(userToken, secret);
+            const loggedInUserId = userData._id;
+            // Find the profile by ID and check if the logged-in user owns it
+            const profile = await Profile.findById(req.params.id);
+            if (!profile) {
+            return res.status(400).json({ message: 'Profile not found' });
+            }
+            if (profile.user.toString() !== loggedInUserId) {
+            return res.status(400).json({ message: 'User does not own profile.' });
+            }
+            // Check if the photo exists in the pictures array
+            const filename = req.params.filename;
+            console.log(filename)
 
-
+            // Check if the photo with the given filename exists in the pictures array
+            const index = profile.pictures.indexOf(filename);
+            if (index !== -1) {
+              // Remove the photo from the pictures array
+            profile.pictures.splice(index, 1);
+            // Save the updated profile
+            await profile.save();
+            return res.json(profile);
+        } else {
+            // If the photo with the given filename is not found in the pictures array
+            return res.status(400).json({ message: "Photo not found in profile" });
+        }
+        } catch (err) {
+        res.status(400).json({ error: err });
+        }
+    },
 }

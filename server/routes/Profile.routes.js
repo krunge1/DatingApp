@@ -1,10 +1,14 @@
-const ProfileController = require('../controllers/Profile.controller')
+const ProfileController = require('../controllers/Profile.controller');
+const fileUploadMiddleware = require('../models/fileUploadMiddleware');
 
 module.exports = app => {
     app.get('/api/datingapp/profiles', ProfileController.findAllProfiles);
     app.get('/api/datingapp/profiles/:id', ProfileController.findProfileById);
     app.post('/api/datingapp/profiles/create', ProfileController.createProfile);
     app.post('/api/datingapp/profiles/update/:id', ProfileController.updateProfile);
-    app.post('/api/datingapp/profiles/uploadPhoto/:id', ProfileController.uploadPhoto);
+    app.post('/api/datingapp/profiles/uploadPhoto/:id', fileUploadMiddleware, ProfileController.uploadPhoto);
+    app.post('/api/datingapp/profiles/removePhoto/:id/uploads\:filename', ProfileController.removePhoto)
+    app.post('/api/datingapp/profiles/addFriend/:id/:friendId', ProfileController.addFriend);
+    app.post('/api/datingapp/profiles/removeFriend/:id/:friendId', ProfileController.removeFriend);
     app.delete('/api/datingapp/profiles/delete/:id', ProfileController.deleteProfile);
 }
