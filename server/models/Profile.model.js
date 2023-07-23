@@ -37,9 +37,9 @@ const ProfileSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, ref: "User"
     },
-    friend: {
-        type: mongoose.Schema.Types.ObjectId, ref: "Friend"
-    }
+    friend: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Profile"
+    }]
 }, {timestamps: true});
 
 module.exports = mongoose.model('Profile', ProfileSchema);
