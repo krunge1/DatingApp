@@ -18,12 +18,9 @@ const Profile = () => {
                         <span className="text-dText font-bold ">Home</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
+
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold ">Proflie</span>
-                    </div>
-                    <div className="border border-r border-secondary h-4" />
-                    <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold">Login</span>
+                        <span className="text-dText font-bold">Logout</span>
                     </div>
                 </div>
             </div>
