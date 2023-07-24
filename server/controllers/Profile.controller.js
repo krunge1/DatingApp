@@ -146,6 +146,40 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
+       //Add Blind Date to Profile Model
+    addBlindDate: async (req, res) => {
+        try{
+            const {userToken} = req.cookies;
+            //Verify if logged in
+            if(!userToken){
+                return res.status(400).json({message: "User must be logged in"});
+            }
+            //Verify Token and get userID
+            const userData = await jwt.verify(userToken, secret);
+            const loggedInUserId = userData._id;
+            // Find the profile by ID and check if the logged-in user DOES NOT owns it
+            const friendProfile = await Profile.findById(req.params.friendId);
+            if (!friendProfile) {
+                return res.status(400).json({ message: 'Profile not found' });
+            }
+            //Verify if user is attempting to add blind date to own profile
+            if(friendProfile.user.toString() === loggedInUserId){
+                return res.status(400).json({message: "Cannot add own profile to a date."})
+            }
+            // Check if the blindDateId already exists in the Blind Date array
+            blindDateId = req.params.blindDateId
+            // console.log(friendId)
+            const blindDate = friendProfile.blindDate.find((blindDate) => blindDate.toString() === blindDateId);
+            if(blindDate){
+                return res.status(400).json({message: 'Blind Date already added'});
+            }
+            friendProfile.blindDate.push(blindDateId);
+            await friendProfile.save();
+            res.json(friendProfile);
+        }catch (err){
+            res.status(400).json({error: err})
+        }
+    },
         
     // "photos" need to match with data.set("photos", files); in uploadPhoto() in MyTrail.jsx
     // 100 is the limit (can be any other number)
@@ -233,6 +267,39 @@ module.exports = {
                 return res.status(400).json({message: 'Friend not found'});
             }
             profile.friend.splice(existingFriendIndex, 1);
+            await profile.save();
+            res.json(profile);
+        }catch (err){
+            res.status(400).json({error: err})
+        }
+    },
+    removeBlindDate: async (req, res) => {
+        try{
+            const {userToken} = req.cookies;
+            //Verify if logged in
+            if(!userToken){
+                return res.status(400).json({message: "User must be logged in"});
+            }
+            //Verify Token and get userID
+            const userData = await jwt.verify(userToken, secret);
+            const loggedInUserId = userData._id;
+            // Find the profile by ID and check if the logged-in user owns it
+            const profile = await Profile.findById(req.params.id);
+            // console.log(profile._id)
+            if (!profile) {
+                return res.status(400).json({ message: 'Profile not found' });
+            }
+            if(profile.user.toString() !== loggedInUserId){
+                return res.status(400).json({message: "User does not own profile."})
+            }
+            // Check if the blindDateId already exists in the Blind Date array
+            blindDateId = req.params.blindDateId
+            const existingBlindDateIndex = profile.blindDate.findIndex((blindDate) => blindDate.toString() === blindDateId);
+            // console.log(existingBlindDateIndex)
+            if (existingBlindDateIndex === -1) {
+                return res.status(400).json({message: 'Blind Date not found'});
+            }
+            profile.blindDate.splice(existingBlindDateIndex, 1);
             await profile.save();
             res.json(profile);
         }catch (err){
