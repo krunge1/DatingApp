@@ -10,5 +10,7 @@ module.exports = app => {
     app.post('/api/datingapp/profiles/removePhoto/:id/uploads\:filename', ProfileController.removePhoto)
     app.post('/api/datingapp/profiles/addFriend/:id/:friendId', ProfileController.addFriend);
     app.post('/api/datingapp/profiles/removeFriend/:id/:friendId', ProfileController.removeFriend);
+    app.post('/api/datingapp/profiles/addBlindDate/:friendId/:blindDateId', ProfileController.addBlindDate);
+    app.post('/api/datingapp/profiles/removeBlindDate/:id/:blindDateId', ProfileController.removeBlindDate);
     app.delete('/api/datingapp/profiles/delete/:id', ProfileController.deleteProfile);
 }

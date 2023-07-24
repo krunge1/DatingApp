@@ -39,6 +39,9 @@ const ProfileSchema = new mongoose.Schema({
     },
     friend: [{
         type: mongoose.Schema.Types.ObjectId, ref: "Profile"
+    }],
+    blindDate: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Profile"
     }]
 }, {timestamps: true});
 
