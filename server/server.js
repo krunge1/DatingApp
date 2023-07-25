@@ -14,4 +14,6 @@ app.use(cookieParser())
 require("./routes/User.routes")(app);
 require("./routes/Profile.routes")(app);
 
+console.log(process.env.DB_PORT)
+
 app.listen(process.env.DB_PORT, () => console.log("The server is all fired up"));
