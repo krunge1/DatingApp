@@ -1,13 +1,14 @@
-const mongoose =  require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-mongoose.connect(process.env.MongoDBURL, {
-    useNewURLParser: true,
-    useUnifiedTopology: true
-})
+mongoose
+    .connect(process.env.MongoDBURL, {
+        useNewURLParser: true,
+        useUnifiedTopology: true,
+    })
 
-    .then(() => console.log('Established a connection to the database'))
-    .catch(err => 
-        console.log(err
-            ),
-        console.log('Something went wrong when connecting to the database'))
+    .then(() => console.log("Established a connection to the database"))
+    .catch((err) => {
+        console.log(err),
+            console.log("Something went wrong when connecting to the database");
+    });
