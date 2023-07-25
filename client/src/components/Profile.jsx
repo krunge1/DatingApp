@@ -3,7 +3,7 @@ import testImg from "../assets/testImages/titann.jpg";
 
 const Profile = () => {
     return (
-        <div className=" px-8 pt-8 m-auto">
+        <div className=" px-8 pt-8 m-auto mb-8">
             <div className="flex items-center justify-between pb-8">
                 <div className="">
                     <div className="flex justify-center gap-1">
