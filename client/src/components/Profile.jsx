@@ -1,9 +1,9 @@
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 
-const Friends = () => {
+const Profile = () => {
     return (
-        <div className=" px-8 pt-8 m-auto">
+        <div className=" px-8 pt-8 m-auto mb-8">
             <div className="flex items-center justify-between pb-8">
                 <div className="">
                     <div className="flex justify-center gap-1">
@@ -18,10 +18,7 @@ const Friends = () => {
                         <span className="text-dText font-bold ">Home</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
-                    <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold ">Proflie</span>
-                    </div>
-                    <div className="border border-r border-secondary h-4" />
+
                     <div className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-dText font-bold">Logout</span>
                     </div>
@@ -57,13 +54,6 @@ const Friends = () => {
                                 <div className="">
                                     <div className="flex justify-center gap-1">
                                         <h2 className="text-dText">Name</h2>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                                    <div className="cursor-pointer hover:scale-110 duration-200">
-                                        <span className="text-dText font-bold ">
-                                            Remove Friend
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -116,38 +106,6 @@ const Friends = () => {
                 <div className="bottom-section">
                     <div className="bottom-top mb-8">
                         <h4 className="font-semibold text-md text-slate-600 my-2">
-                            Recommend a Blind Date :
-                        </h4>
-                        <div className="md:grid md:grid-cols-2 gap-8">
-                            <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
-                                </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
-                            </div>
-                            <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
-                                </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <hr className="mb-8" />
-                    <div className="bottom-bottom mb-8">
-                        <h4 className="font-semibold text-md text-slate-600 my-2">
                             My Friends :
                         </h4>
                         <div className="md:grid md:grid-cols-2 gap-8">
@@ -177,10 +135,20 @@ const Friends = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="flex justify-end mt-4">
+                        <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
+                            <div className="cursor-pointer hover:scale-110 duration-200 ">
+                                <span className="text-dText font-bold">
+                                    Edit Profile
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Friends;
+export default Profile;

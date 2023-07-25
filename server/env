@@ -1,0 +1,9 @@
+MongoDBURL=mongodb://127.0.0.1:27017/dating_app_db
+
+DB_PORT=8000
+
+ORIGIN_PORT="http://localhost:3000"
+
+SECRET_KEY=123DatingApp
+
+
