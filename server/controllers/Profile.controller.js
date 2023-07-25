@@ -172,7 +172,7 @@ module.exports = {
             const blindDate = friendProfile.blindDate.find((blindDate) => blindDate.toString() === blindDateId);
             if(blindDate){
                 return res.status(400).json({message: 'Blind Date already added'});
-            }
+            };
             friendProfile.blindDate.push(blindDateId);
             await friendProfile.save();
             res.json(friendProfile);
@@ -180,7 +180,6 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-        
     // "photos" need to match with data.set("photos", files); in uploadPhoto() in MyTrail.jsx
     // 100 is the limit (can be any other number)
     uploadPhoto: async (req, res) => {
