@@ -24,7 +24,9 @@ const RegisterForm = (props) => {
     };
 
     const handleSubmit = (e) => {
+        console.log("is this working?");
         e.preventDefault();
+        
         axios
             .post("http://localhost:8000/api/register", formState, {
                 withCredentials: true,
