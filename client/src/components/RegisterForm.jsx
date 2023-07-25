@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IconChatHeart from "../assets/icons/HeartIcon";
 
 const RegisterForm = (props) => {
@@ -28,15 +28,15 @@ const RegisterForm = (props) => {
         e.preventDefault();
         
         axios
-            .post("http://localhost:8000/api/register", formState, {
+            .post("http://localhost:8000/api/datingapp/register", formState, {
                 withCredentials: true,
             })
             .then((res) => {
                 console.log(res.data);
-                navigate("/home");
+                navigate("/dashboard");
             })
             .catch((err) => {
-                console.log(err.response.data.errors);
+                console.log(err);
                 setErrors(err.response.data.errors);
             });
     };
@@ -49,11 +49,23 @@ const RegisterForm = (props) => {
                     <span>
                         <IconChatHeart className="text-3xl text-dText hover:scale-150 duration-200" />
                     </span>
+                    
                 </div>
                 <div className="flex items-center gap-2 justify-end rotate-[353deg]">
                     <h2>Register</h2>
                 </div>
-
+                <div className="flex justify-between  mt-4 max-w-[300px] m-auto">
+                    <span className="text-secondary">
+                        {" "}
+                    </span>
+                    <span className="text-dText underline font-semibold" > Back to
+                        {" "}
+                        <Link to={"/"}>
+                        Login
+                        </Link>
+                        {" "}
+                    </span>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label
