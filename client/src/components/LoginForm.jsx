@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IconChatHeart from "../assets/icons/HeartIcon";
 
-const RegisterForm = (props) => {
+const LoginForm = (props) => {
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState({
-        name: "",
         email: "",
-        birthdate: null,
-        password: "",
-        confirmPassword: "",
+        password: ""
     });
     const [errors, setErrors] = useState({});
 
@@ -26,14 +23,15 @@ const RegisterForm = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         axios
-            .post("http://localhost:8000/api/register", formState, {
+            .post("http://localhost:8000/api/datingapp/login", formState, {
                 withCredentials: true,
             })
             .then((res) => {
                 console.log(res.data);
-                navigate("/home");
+                navigate("/dashboard");
             })
             .catch((err) => {
+                console.log(err);
                 console.log(err.response.data.errors);
                 setErrors(err.response.data.errors);
             });
@@ -102,9 +100,9 @@ const RegisterForm = (props) => {
                     </span>
                     <span className="text-dText underline font-semibold" >
                         {" "}
-                        <a href="/register">
+                        <Link to={"/register"}>
                         Register
-                        </a>
+                        </Link>
                         {" "}
                     </span>
                 </div>
@@ -113,4 +111,4 @@ const RegisterForm = (props) => {
     );
 };
 
-export default RegisterForm;
+export default LoginForm;
