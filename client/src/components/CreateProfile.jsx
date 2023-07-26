@@ -1,9 +1,49 @@
-import React from "react";
+import React, {useState} from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import { useNavigate } from "react-router-dom";
 
 const CreateProfile = (props) => {
     const { logout } = props;
+    const navigate = useNavigate();
+
+    const [formState, setFormState] = useState({
+        name: "",
+        email: "",
+        birthdate: null,
+        password: "",
+        confirmPassword: "",
+    });
+    const [errors, setErrors] = useState({});
+
+    const onChangeHandler = (e) => {
+        e.preventDefault();
+        setFormState({
+            ...formState,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        console.log("is this working?");
+        e.preventDefault();
+        
+        axios
+            .post("http://localhost:8000/api/datingapp/register", formState, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log(res.data);
+                navigate("/dashboard");
+            })
+            .catch((err) => {
+                {
+                console.log(err.response.data.error.errors);
+                setErrors(err.response.data.error.errors);
+                }
+            });
+    };
+    
     return (
         <div className="flex flex-col">
             <div className="flex items-center justify-between px-8 py-8">
