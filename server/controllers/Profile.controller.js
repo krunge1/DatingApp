@@ -80,20 +80,23 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-    //Read (Find One By Profile Id)
+    //Read (Find One By User Id)
     findProfileByUserId: (req, res) => {
         try{
             const {userToken} = req.cookies;
-            //Verify if logged in
+            //Verify if Logged In
             if(!userToken){
                 return res.status(400).json({message: "User must be logged in"});
             }
-            //Find profile attached to the User Id
-            Profile.findOne({user: req.params.userId})
-            .then((oneProfile) =>{
-                res.json(oneProfile)
+            const userData = jwt.verify(userToken, secret)
+            const loggedInUserId = userData._id
+            //Verify Token and get userID
+            Profile.findOne({user: loggedInUserId})
+            // console.log(userProfile)
+            .then((userProfile) => {
+                res.json(userProfile)
             })
-            .catch((err) =>{
+            .catch((err) => {
                 res.status(500).json({message: 'Something went wrong', error: err})
             })
         }catch (err){

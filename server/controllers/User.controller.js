@@ -17,7 +17,7 @@ module.exports = {
                 const newUser = await User.create(req.body);
                 //generating a usertoken and storing the id and email of the new user
                 const userToken = jwt.sign({_id: newUser._id, email: newUser.email}, secret, {expiresIn: '2h'})
-                console.log(userToken);
+                // console.log(userToken);
                 res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge: 2 * 60 * 60 * 1000}).json(newUser);
         }
     }

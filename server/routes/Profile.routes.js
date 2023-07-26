@@ -4,7 +4,7 @@ const fileUploadMiddleware = require('../models/fileUploadMiddleware');
 module.exports = app => {
     app.get('/api/datingapp/profiles', ProfileController.findAllProfiles);
     app.get('/api/datingapp/profiles/:id', ProfileController.findProfileById);
-    app.get('/api/datingapp/profiles/user/:userId', ProfileController.findProfileByUserId)
+    app.get('/api/datingapp/userProfile', ProfileController.findProfileByUserId);
     app.post('/api/datingapp/profiles/create', ProfileController.createProfile);
     app.post('/api/datingapp/profiles/update/:id', ProfileController.updateProfile);
     app.post('/api/datingapp/profiles/uploadPhoto/:id', fileUploadMiddleware, ProfileController.uploadPhoto);
