@@ -194,16 +194,12 @@ const CreateProfile = () => {
                         </div>
                     </div>
                 </div>
-                <div className="max-w-[920px] flex flex-col m-auto">
-                    <div className="flex items-center gap-2 ">
-                        <input className="text-dText" type="text" name="name" />
-                        <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                            <div className="cursor-pointer hover:scale-110 duration-200">
-                                <span className="text-dText font-bold">
-                                    Browser
-                                </span>
-                            </div>
-                        </div>
+                <div className="max-w-[150px] flex flex-col m-auto mt-4">
+                    {/* <div className="flex items-center gap-2 "> */}
+                    {/* <input className="text-dText" type="text" name="name" /> */}
+                    <div className="flex  justify-center hover:scale-110 duration-200 cursor-pointer gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                        <span className="text-dText font-bold ">Brows</span>
+                        {/* </div> */}
                     </div>
                 </div>
                 <div className="  justify-around m-auto items-center gap-4 my-2 max-w-[780px]">
