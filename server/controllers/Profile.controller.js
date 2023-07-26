@@ -60,7 +60,7 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-    //Read (Find One By User Id)
+    //Read (Find One By Profile Id)
     findProfileById: (req, res) => {
         try{
             const {userToken} = req.cookies;
@@ -74,6 +74,29 @@ module.exports = {
                 //Find All Friends by Profile data is available in this oneProfile object. Access friends by oneProfile.friend._id
             })
             .catch((err) =>{
+                res.status(500).json({message: 'Something went wrong', error: err})
+            })
+        }catch (err){
+            res.status(400).json({error: err})
+        }
+    },
+    //Read (Find One By User Id)
+    findProfileByUserId: (req, res) => {
+        try{
+            const {userToken} = req.cookies;
+            //Verify if Logged In
+            if(!userToken){
+                return res.status(400).json({message: "User must be logged in"});
+            }
+            const userData = jwt.verify(userToken, secret)
+            const loggedInUserId = userData._id
+            //Verify Token and get userID
+            Profile.findOne({user: loggedInUserId})
+            // console.log(userProfile)
+            .then((userProfile) => {
+                res.json(userProfile)
+            })
+            .catch((err) => {
                 res.status(500).json({message: 'Something went wrong', error: err})
             })
         }catch (err){
@@ -156,6 +179,8 @@ module.exports = {
             }
             //Verify Token and get userID
             const userData = await jwt.verify(userToken, secret);
+            // const userProfile = findProfileByUserId(user._id);
+            // const blindDateProfile = await Profile.findById(req.params.blindDateId);
             const loggedInUserId = userData._id;
             // Find the profile by ID and check if the logged-in user DOES NOT owns it
             const friendProfile = await Profile.findById(req.params.friendId);
@@ -173,6 +198,10 @@ module.exports = {
             if(blindDate){
                 return res.status(400).json({message: 'Blind Date already added'});
             };
+            // //Check to see if the User is actually friends with the Friend profile getting blind date add and the Blind Date Profile
+            // if(!userProfile.friend.find(friendId) || !blindDate.friend.find(blindDateID)){
+            //     return res.status(400).json({message: 'You must be friends with both profiles to add a blind date'});
+            // }
             friendProfile.blindDate.push(blindDateId);
             await friendProfile.save();
             res.json(friendProfile);

@@ -39,7 +39,12 @@ const RegisterForm = (props) => {
             })
             .catch((err) => {
                 {
+<<<<<<< HEAD
                     console.log(err), setErrors(err.response.data.errors);
+=======
+                console.log(err.response.data.error.errors);
+                setErrors(err.response.data.error.errors);
+>>>>>>> main
                 }
             });
     };

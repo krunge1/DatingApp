@@ -18,6 +18,7 @@ module.exports = {
                 //create user
                 const newUser = await User.create(req.body);
                 //generating a usertoken and storing the id and email of the new user
+<<<<<<< HEAD
                 const userToken = jwt.sign(
                     { _id: newUser._id, email: newUser.email },
                     secret,
@@ -33,6 +34,15 @@ module.exports = {
             }
         } catch (err) {
             res.status(400).json({ error: err });
+=======
+                const userToken = jwt.sign({_id: newUser._id, email: newUser.email}, secret, {expiresIn: '2h'})
+                // console.log(userToken);
+                res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge: 2 * 60 * 60 * 1000}).json(newUser);
+        }
+    }
+        catch(err){
+            res.status(400).json({error: err})
+>>>>>>> main
         }
     },
 

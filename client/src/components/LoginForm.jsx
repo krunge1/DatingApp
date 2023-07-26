@@ -31,9 +31,8 @@ const LoginForm = (props) => {
                 navigate("/dashboard");
             })
             .catch((err) => {
-                console.log(err);
-                console.log(err.response.data.errors);
-                setErrors(err.response.data.errors);
+                console.log(err.response.data.message);
+                setErrors(err.response.data);
             });
     };
 
@@ -67,7 +66,7 @@ const LoginForm = (props) => {
                                 onChange={onChangeHandler}
                             />
                         </div>
-                        {errors.email ? <p> {errors.email.message} </p> : ""}
+                        {errors ? <p> {errors.message} </p> : ""}
 
                         <div>
                             <label
@@ -84,8 +83,8 @@ const LoginForm = (props) => {
                                 onChange={onChangeHandler}
                             />
                         </div>
-                        {errors.password ? (
-                            <p> {errors.password.message} </p>
+                        {errors ? (
+                            <p> {errors.message} </p>
                         ) : (
                             ""
                         )}
