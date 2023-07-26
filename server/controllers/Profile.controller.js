@@ -179,9 +179,11 @@ module.exports = {
             }
             //Verify Token and get userID
             const userData = await jwt.verify(userToken, secret);
-            // const userProfile = findProfileByUserId(user._id);
-            // const blindDateProfile = await Profile.findById(req.params.blindDateId);
             const loggedInUserId = userData._id;
+            const blindDateProfile = await Profile.findById(req.params.blindDateId);
+            const userProfile = await Profile.findOne({user: loggedInUserId})
+            const blindDateId = req.params.blindDateId;
+            console.log(userProfile._id)
             // Find the profile by ID and check if the logged-in user DOES NOT owns it
             const friendProfile = await Profile.findById(req.params.friendId);
             if (!friendProfile) {
@@ -192,16 +194,16 @@ module.exports = {
                 return res.status(400).json({message: "Cannot add own profile to a date."})
             }
             // Check if the blindDateId already exists in the Blind Date array
-            blindDateId = req.params.blindDateId
-            // console.log(friendId)
-            const blindDate = friendProfile.blindDate.find((blindDate) => blindDate.toString() === blindDateId);
+            const blindDate = friendProfile.blindDate.find((blindDate) => blindDate.toString() === blindDateProfile._id);
             if(blindDate){
                 return res.status(400).json({message: 'Blind Date already added'});
             };
-            // //Check to see if the User is actually friends with the Friend profile getting blind date add and the Blind Date Profile
-            // if(!userProfile.friend.find(friendId) || !blindDate.friend.find(blindDateID)){
-            //     return res.status(400).json({message: 'You must be friends with both profiles to add a blind date'});
-            // }
+            // Check to see if the User is actually friends with the Friend profile getting blind date add and the Blind Date Profile
+            const isFriendWithFriendProfile = userProfile.friend.includes(friendProfile._id.toString());
+            const isFriendWithBlindDateProfile = userProfile.friend.includes(blindDateProfile._id.toString());
+            if (!isFriendWithFriendProfile || !isFriendWithBlindDateProfile) {
+                return res.status(400).json({ message: 'You must be friends with both profiles to add a blind date' });
+            };
             friendProfile.blindDate.push(blindDateId);
             await friendProfile.save();
             res.json(friendProfile);
