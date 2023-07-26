@@ -2,11 +2,15 @@ import React, {useEffect, useState} from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+    const { logout } = props
+    
     const [friends, setFriends] = useState({})
     const [blindDates, setBlindDates] = useState({})
+    const [profileID, setProfileID] = useState({})
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
@@ -21,6 +25,7 @@ const Dashboard = () => {
                 console.log(res.data);
                 setFriends(res.data.friend);
                 setBlindDates(res.data.blindDate);
+                setProfileID(res.data._id);
                 console.log(friends);
                 console.log(blindDates);
             })
@@ -41,11 +46,11 @@ const Dashboard = () => {
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
 
-                        <span className="text-dText font-bold ">Profile</span>
+                        <span className="text-dText font-bold "><Link to={"/profile/" + profileID}>Profile</Link></span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold">Logout</span>
+                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
                     </div>
                 </div>
             </div>

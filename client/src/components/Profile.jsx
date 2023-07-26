@@ -3,13 +3,9 @@ import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import { useNavigate } from "react-router-dom";
 
-const Profile = () => {
-    const nav = useNavigate();
+const Profile = (props) => {
+    const {logout} = props
 
-    async function logout() {
-        await axios.post("/api/datingapp/logout");
-        nav("/");
-    }
     return (
         <div className=" px-8 pt-8 m-auto mb-8">
             <div className="flex items-center justify-between pb-8">
@@ -28,11 +24,8 @@ const Profile = () => {
                     <div className="border border-r border-secondary h-4" />
 
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <button
-                            onClick={logout}
-                            className="text-dText font-bold">
-                            Logout
-                        </button>
+
+                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
                     </div>
                 </div>
             </div>

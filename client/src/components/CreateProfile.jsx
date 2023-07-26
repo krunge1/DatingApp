@@ -2,7 +2,8 @@ import React from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 
-const CreateProfile = () => {
+const CreateProfile = (props) => {
+    const { logout } = props;
     return (
         <div className="flex flex-col">
             <div className="flex items-center justify-between px-8 py-8">
@@ -16,7 +17,7 @@ const CreateProfile = () => {
                 </div>
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold">Logout</span>
+                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
                     </div>
                 </div>
             </div>
