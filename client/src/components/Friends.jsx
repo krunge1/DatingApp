@@ -1,7 +1,8 @@
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 
-const Friends = () => {
+const Friends = (props) => {
+    const {logout} = props
     return (
         <div className=" px-8 pt-8 m-auto">
             <div className="flex items-center justify-between pb-8">
@@ -23,7 +24,7 @@ const Friends = () => {
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold">Logout</span>
+                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
                     </div>
                 </div>
             </div>
