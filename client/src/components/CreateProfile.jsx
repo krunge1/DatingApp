@@ -2,18 +2,23 @@ import React, {useState} from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreateProfile = (props) => {
-    const { logout } = props;
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState({
-        name: "",
-        email: "",
-        birthdate: null,
-        password: "",
-        confirmPassword: "",
+        address: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        aboutMe: "",
+        gender: "",
+        sexualOrientation: "",
+        pictures: [],
+        interests: []
     });
+    
     const [errors, setErrors] = useState({});
 
     const onChangeHandler = (e) => {
@@ -24,26 +29,44 @@ const CreateProfile = (props) => {
         });
     };
 
+    const logout = () => {
+        axios
+            .post(
+                "http://localhost:8000/api/datingapp/logout",
+                {},
+                { withCredentials: true }
+            )
+            .then((res) => {
+                console.log(res);
+                navigate("/");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     const handleSubmit = (e) => {
         console.log("is this working?");
         e.preventDefault();
-        
+
         axios
-            .post("http://localhost:8000/api/datingapp/register", formState, {
+            .post("http://localhost:8000/api/datingapp/profiles/create", formState, {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res.data);
-                navigate("/dashboard");
+                {
+                    console.log(res.data);
+                    navigate("/profile/" + res.data._id);
+                }
             })
             .catch((err) => {
                 {
-                console.log(err.response.data.error.errors);
-                setErrors(err.response.data.error.errors);
+                    console.log(err.response.data.error.errors);
+                    setErrors(err.response.data.error.errors);
                 }
             });
     };
-    
+
     return (
         <div className="flex flex-col">
             <div className="flex items-center justify-between px-8 py-8">
@@ -57,41 +80,43 @@ const CreateProfile = (props) => {
                 </div>
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
+                        <span className="text-dText font-bold" onClick={logout}>
+                            Logout
+                        </span>
                     </div>
                 </div>
             </div>
-            <form action="" className=" justify-self-center w-[90%] m-auto ">
+            <form onSubmit={handleSubmit} className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
-                        htmlFor="email">
+                        htmlFor="aboutMe">
                         About&nbsp;Me
                     </label>
-                    <textarea name="" id="" cols="30" rows="5"></textarea>
+                    <textarea onChange={onChangeHandler} name="aboutMe" value={formState.aboutMe} id="" cols="30" rows="5"></textarea>
                 </div>
                 <div className="justify-around m-auto flex items-center gap-4 my-2  max-w-[780px]">
                     <h3
                         className="text-dText/50 font-semibold text-md mr-4"
-                        htmlFor="email">
-                        Gernder
+                        htmlFor="gender">
+                        Gender
                     </h3>
                     <div className="grid sm:grid-cols-2 md:grid-cols-4">
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="male" />
+                            <input type="radio" name="gender" value="male" onChange={onChangeHandler}/>
                             <label className="text-dText/50 font-semibold text-sm">
                                 male
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="female" />
+                            <input type="radio" name="gender" value="female" onChange={onChangeHandler}/>
                             <label className="text-dText/50 font-semibold text-sm">
                                 female
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="other" />
+                            <input type="radio" name="gender" value="other" onChange={onChangeHandler}/>
                             <label className="text-dText/50 font-semibold text-sm">
                                 other
                             </label>
@@ -101,6 +126,7 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="gender"
                                 value="notState"
+                                onChange={onChangeHandler}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -118,6 +144,7 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="straight"
+                                onChange={onChangeHandler}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 straight
@@ -128,6 +155,7 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="gay"
+                                onChange={onChangeHandler}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 gay
@@ -138,6 +166,7 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="bi"
+                                onChange={onChangeHandler}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 bi
@@ -148,6 +177,7 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="notState"
+                                onChange={onChangeHandler}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -160,7 +190,7 @@ const CreateProfile = (props) => {
                         <label className="text-dText/50 font-semibold text-sm">
                             Address
                         </label>
-                        <input className="text-dText" type="text" name="name" />
+                        <input className="text-dText" type="text" name="address" value={formState.address} onChange={onChangeHandler}/>
                     </div>
                     <div className="grid md:grid-cols-3 gap-4 w-full py-2">
                         <div className="flex items-center gap-2">
@@ -170,7 +200,9 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="city"
+                                value={formState.city}
+                                onChange={onChangeHandler}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -180,7 +212,9 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="state"
+                                value={formState.state}
+                                onChange={onChangeHandler}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -190,9 +224,19 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="zipCode"
+                                value={formState.zipCode}
+                                onChange={onChangeHandler}
                             />
                         </div>
+                        {errors.zipCode ? (
+                            <p className="font-semibold text-sm text-red-400">
+                                {" "}
+                                {errors.zipCode.message}{" "}
+                            </p>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
                 <div className="PHOTO">
@@ -235,16 +279,13 @@ const CreateProfile = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="max-w-[920px] flex flex-col m-auto">
-                    <div className="flex items-center gap-2 ">
-                        <input className="text-dText" type="text" name="name" />
-                        <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                            <div className="cursor-pointer hover:scale-110 duration-200">
-                                <span className="text-dText font-bold">
-                                    Browser
-                                </span>
-                            </div>
-                        </div>
+                <div className="max-w-[150px] flex flex-col m-auto mt-4">
+                    {/* <div className="flex items-center gap-2 "> */}
+                    {/* <input className="text-dText" type="text" name="name" /> */}
+                    <input type="file" multiple className="hidden" />
+                    <div className="flex justify-center hover:scale-110 duration-200 cursor-pointer gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                        <span className="text-dText font-bold ">Browse</span>
+                        {/* </div> */}
                     </div>
                 </div>
                 <div className="  justify-around m-auto items-center gap-4 my-2 max-w-[780px]">
@@ -293,9 +334,9 @@ const CreateProfile = (props) => {
                 <div className="flex justify-end mt-4">
                     <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
                         <div className="cursor-pointer hover:scale-110 duration-200 ">
-                            <span className="text-dText font-bold">
+                            <button className="text-dText font-bold" type="submit">
                                 Create Account
-                            </span>
+                            </button>
                         </div>
                     </div>
                 </div>

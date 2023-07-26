@@ -13,28 +13,17 @@ import EditProfile from "./components/EditProfile";
 import axios from "axios";
 
 function App() {
-    const navigate = useNavigate
-    const logout = () => {
-        axios.post('http://localhost:8000/api/datingapp/logout', {} , {withCredentials:true})
-            .then((res) => {
-                navigate('/')
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
     return (
         <div>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
-                    <Route path="/dashboard" element={<Dashboard logout={logout}/>} />
-                    <Route path="/profile" element={<CreateProfile logout={logout}/>} />
-                    <Route path="/profile/:id" element={<Profile logout={logout}/>} />
-                    <Route path="/profile/:id/edit" element={<EditProfile logout={logout}/>} />
-                    <Route path="/friends/:id" element={<Friends logout={logout}/>} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/profile" element={<CreateProfile />} />
+                    <Route path="/profile/:id" element={<Profile />} />
+                    <Route path="/profile/:id/edit" element={<EditProfile />} />
+                    <Route path="/friends/:id" element={<Friends />} />
                     {/* <Route pathe="/dashboard" element={<HomePage/>}/> */}
                 </Routes>
             </BrowserRouter>

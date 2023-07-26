@@ -1,8 +1,26 @@
+import axios from "axios";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
-    const {logout} = props
+    const navigate = useNavigate();
+    const logout = () => {
+        axios
+            .post(
+                "http://localhost:8000/api/datingapp/logout",
+                {},
+                { withCredentials: true }
+            )
+            .then((res) => {
+                console.log(res);
+                navigate("/");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <div className=" px-8 pt-8 m-auto mb-8">
             <div className="flex items-center justify-between pb-8">
@@ -21,7 +39,9 @@ const Profile = (props) => {
                     <div className="border border-r border-secondary h-4" />
 
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold" onClick={logout}>Logout</span>
+                        <span className="text-dText font-bold" onClick={logout}>
+                            Logout
+                        </span>
                     </div>
                 </div>
             </div>
