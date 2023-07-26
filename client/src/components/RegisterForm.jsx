@@ -39,12 +39,8 @@ const RegisterForm = (props) => {
             })
             .catch((err) => {
                 {
-<<<<<<< HEAD
-                    console.log(err), setErrors(err.response.data.errors);
-=======
-                console.log(err.response.data.error.errors);
-                setErrors(err.response.data.error.errors);
->>>>>>> main
+                    console.log(err.response.data.error.errors);
+                    setErrors(err.response.data.error.errors);
                 }
             });
     };
@@ -83,7 +79,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.name ? <p> {errors.name.message} </p> : ""}
+                    {errors.name ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.name.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -99,7 +102,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.email ? <p> {errors.email.message} </p> : ""}
+                    {errors.email ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.email.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -116,7 +126,10 @@ const RegisterForm = (props) => {
                         />
                     </div>
                     {errors.birthdate ? (
-                        <p> {errors.birthdate.message} </p>
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.birthdate.message}{" "}
+                        </p>
                     ) : (
                         ""
                     )}
@@ -135,7 +148,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.password ? <p> {errors.password.message} </p> : ""}
+                    {errors.password ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.password.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -152,7 +172,10 @@ const RegisterForm = (props) => {
                         />
                     </div>
                     {errors.confirmPassword ? (
-                        <p> {errors.confirmPassword.message} </p>
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.confirmPassword.message}{" "}
+                        </p>
                     ) : (
                         ""
                     )}
