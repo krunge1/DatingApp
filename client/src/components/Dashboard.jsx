@@ -1,8 +1,38 @@
-import React from "react";
+import React, {useEffect} from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import axios from "axios";
 
 const Dashboard = () => {
+
+    const goToProfile = (e) => {
+        console.log("let's get this profile")
+        e.preventDefault();
+
+        axios
+            .get("http://localhost:8000/api/profiles/user/:userId", )
+    }
+
+    const handleSubmit = (e) => {
+        console.log("is this working?");
+        e.preventDefault();
+        
+        axios
+            .post("http://localhost:8000/api/datingapp/register", formState, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log(res.data);
+                navigate("/dashboard");
+            })
+            .catch((err) => {
+                {
+                console.log(err.response.data.error.errors);
+                setErrors(err.response.data.error.errors);
+                }
+            });
+    };
+
     return (
         <div>
             <div className="flex items-center justify-between px-8 py-8">
@@ -16,7 +46,8 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold "><a href="/profile">Profile</a></span>
+
+                        <span className="text-dText font-bold " onClick={goToProfile}>Profile</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
