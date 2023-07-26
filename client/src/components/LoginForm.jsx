@@ -8,7 +8,7 @@ const LoginForm = (props) => {
 
     const [formState, setFormState] = useState({
         email: "",
-        password: ""
+        password: "",
     });
     const [errors, setErrors] = useState({});
 
@@ -52,42 +52,54 @@ const LoginForm = (props) => {
                 <form onSubmit={handleSubmit}>
                     <div className="grid md:grid-cols-2 gap-4 w-full py-2">
                         <div>
-                            <label
-                                className="text-dText/50 font-semibold text-sm "
-                                htmlFor="email">
-                                Email
-                            </label>
-
-                            <input
-                                className="text-dText"
-                                type="email"
-                                name="email"
-                                value={formState.email}
-                                onChange={onChangeHandler}
-                            />
+                            <div>
+                                <label
+                                    className="text-dText/50 font-semibold text-sm "
+                                    htmlFor="email">
+                                    Email
+                                </label>
+                                <input
+                                    className="text-dText"
+                                    type="email"
+                                    name="email"
+                                    value={formState.email}
+                                    onChange={onChangeHandler}
+                                />
+                            </div>
+                            {errors ? (
+                                <p className="font-semibold text-sm text-red-400">
+                                    {" "}
+                                    {errors.message}{" "}
+                                </p>
+                            ) : (
+                                ""
+                            )}
                         </div>
-                        {errors ? <p> {errors.message} </p> : ""}
-
                         <div>
-                            <label
-                                className="text-dText/50 font-semibold text-sm"
-                                htmlFor="password">
-                                Password
-                            </label>
+                            <div>
+                                <label
+                                    className="text-dText/50 font-semibold text-sm"
+                                    htmlFor="password">
+                                    Password
+                                </label>
 
-                            <input
-                                className="text-dText"
-                                type="password"
-                                name="password"
-                                value={formState.password}
-                                onChange={onChangeHandler}
-                            />
+                                <input
+                                    className="text-dText"
+                                    type="password"
+                                    name="password"
+                                    value={formState.password}
+                                    onChange={onChangeHandler}
+                                />
+                            </div>
+                            {errors ? (
+                                <p className="font-semibold text-sm text-red-400">
+                                    {" "}
+                                    {errors.message}{" "}
+                                </p>
+                            ) : (
+                                ""
+                            )}
                         </div>
-                        {errors ? (
-                            <p> {errors.message} </p>
-                        ) : (
-                            ""
-                        )}
                     </div>
                     <button className="primary mt-4" type="submit">
                         Login
@@ -97,12 +109,9 @@ const LoginForm = (props) => {
                     <span className="text-secondary">
                         Don't have an account?
                     </span>
-                    <span className="text-dText underline font-semibold" >
+                    <span className="text-dText underline font-semibold">
                         {" "}
-                        <Link to={"/register"}>
-                        Register
-                        </Link>
-                        {" "}
+                        <Link to={"/register"}>Register</Link>{" "}
                     </span>
                 </div>
             </div>

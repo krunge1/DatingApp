@@ -26,19 +26,21 @@ const RegisterForm = (props) => {
     const handleSubmit = (e) => {
         console.log("is this working?");
         e.preventDefault();
-        
+
         axios
             .post("http://localhost:8000/api/datingapp/register", formState, {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res.data);
-                navigate("/dashboard");
+                {
+                    console.log(res.data);
+                    navigate("/dashboard");
+                }
             })
             .catch((err) => {
                 {
-                console.log(err.response.data.error.errors);
-                setErrors(err.response.data.error.errors);
+                    console.log(err.response.data.error.errors);
+                    setErrors(err.response.data.error.errors);
                 }
             });
     };
@@ -51,21 +53,15 @@ const RegisterForm = (props) => {
                     <span>
                         <IconChatHeart className="text-3xl text-dText hover:scale-150 duration-200" />
                     </span>
-                    
                 </div>
                 <div className="flex items-center gap-2 justify-end rotate-[353deg]">
                     <h2>Register</h2>
                 </div>
-                <div className="flex justify-between  mt-4 max-w-[300px] m-auto">
-                    <span className="text-secondary">
+                <div className="flex justify-between  mt-4 max-w-[300px] m-auto cursor-pointer">
+                    <span className="text-secondary"> </span>
+                    <span className="text-dText underline font-semibold">
                         {" "}
-                    </span>
-                    <span className="text-dText underline font-semibold" > Back to
-                        {" "}
-                        <Link to={"/"}>
-                        Login
-                        </Link>
-                        {" "}
+                        Back to <Link to={"/"}>Login</Link>{" "}
                     </span>
                 </div>
                 <form onSubmit={handleSubmit}>
@@ -83,7 +79,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.name ? <p> {errors.name.message} </p> : ""}
+                    {errors.name ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.name.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -99,7 +102,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.email ? <p> {errors.email.message} </p> : ""}
+                    {errors.email ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.email.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -116,7 +126,10 @@ const RegisterForm = (props) => {
                         />
                     </div>
                     {errors.birthdate ? (
-                        <p> {errors.birthdate.message} </p>
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.birthdate.message}{" "}
+                        </p>
                     ) : (
                         ""
                     )}
@@ -135,7 +148,14 @@ const RegisterForm = (props) => {
                             onChange={onChangeHandler}
                         />
                     </div>
-                    {errors.password ? <p> {errors.password.message} </p> : ""}
+                    {errors.password ? (
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.password.message}{" "}
+                        </p>
+                    ) : (
+                        ""
+                    )}
 
                     <div>
                         <label
@@ -152,7 +172,10 @@ const RegisterForm = (props) => {
                         />
                     </div>
                     {errors.confirmPassword ? (
-                        <p> {errors.confirmPassword.message} </p>
+                        <p className="font-semibold text-sm text-red-400">
+                            {" "}
+                            {errors.confirmPassword.message}{" "}
+                        </p>
                     ) : (
                         ""
                     )}
