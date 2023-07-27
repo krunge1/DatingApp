@@ -14,8 +14,9 @@ const Friends = (props) => {
     const [friends, setFriends] = useState([]);
     const [friendsFetched, setFriendsFetched] = useState(false);
     const [blindDates, setBlindDates] = useState([]);
-    const [blindDatesFetched, setBlindDatesFetched] = useState([]);
+    const [blindDatesFetched, setBlindDatesFetched] = useState(false);
     const [isFriend, setIsFriend] = useState(false);
+    const [isBlindDate, setIsBlindDate] = useState(false);
 
     
     const logout = () => {
@@ -49,8 +50,9 @@ const Friends = (props) => {
                 withCredentials: true
             })
             .then(res => {
-                console.log(res.data)
                 setUserProfile(res.data)
+                console.log(userProfile)
+                console.log("userProfile.friend:", userProfile.friend[0])
                 // Check if viewed profile ID is in the friend list of the logged-in user
                 if (res.data.friend && res.data.friend.includes(id)) {
                     setIsFriend(true);
@@ -104,34 +106,39 @@ const Friends = (props) => {
         }
     }, [profile.friend, friendsFetched]);   
 
-    // Function to fetch blind date' s profile by ID
-    useEffect(() => { 
-        const fetchBlindDateProfile = (blindDateId) => {
+// Function to fetch blind date's profile by ID
+useEffect(() => { 
+    const fetchBlindDateProfile = (blindDateId) => {
         axios
             .get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
             .then((res) => {
-            console.log(res.data);
-            setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+                console.log(res.data);
+                if (res.data.blindDate && res.data.blindDate.includes(id)) {
+                    setIsBlindDate(true);
+                } else {
+                    setIsBlindDate(false);
+                }
+                setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
             })
             .catch((err) => {
-            console.log(err);
+                console.log(err);
             });
-        };
-        // Check if there are blind dates in the profile
-        if (profile.blindDate && profile.blindDate.length > 0 && !blindDatesFetched) {
-            // Randomize the order of friends
-            const shuffledBlindDates = profile.blindDate.sort(() => Math.random() - 0.5);
-    
-            // Slice the first two friends from the shuffled array
-            const selectedBlindDates = shuffledBlindDates.slice(0, 2);
-    
-            // Loop through each friend and fetch their profile
-            selectedBlindDates.forEach((blindDateId) => {
+    };
+    // Check if there are friends for dates in the user profile
+    if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
+        // Randomize the order of friends
+        const shuffledBlindDates = userProfile.friend.sort(() => Math.random() - 0.5);
+
+        // Slice the first two friends from the shuffled array
+        const selectedBlindDates = shuffledBlindDates.slice(0, 2);
+
+        // Loop through each friend and fetch their profile
+        selectedBlindDates.forEach((blindDateId) => {
             fetchBlindDateProfile(blindDateId);
-            });
-            setBlindDatesFetched(true);
-        }
-    }, [profile.blindDate, blindDatesFetched]);
+        });
+        setBlindDatesFetched(true);
+    }
+}, [userProfile.friend, blindDatesFetched]);
 
     const addFriend = (e) => {
         e.preventDefault();
@@ -157,6 +164,31 @@ const Friends = (props) => {
         console.log(err);
         }, [profile.friend, friendsFetched])};
 
+    const addBlindDate = (e) => {
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/datingapp/profiles/addBlindDate/${blindDate._id}/${id}`, {}, { withCredentials: true })
+        .then (res => {
+        console.log(res.data);
+        setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+        setBlindDates(true);
+        })
+        .catch((err) => {
+        console.log(err);
+        }, [profile.blindDates, blindDatesFetched])};
+
+    const removeBlindDate = (e) => {
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/datingapp/profiles/removeBlindDate/${userProfile._id}/${id}`, {}, { withCredentials: true })
+        .then (res => {
+        console.log(res.data);
+        setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+        setBlindDates(false);
+        })
+        .catch((err) => {
+        console.log(err);
+        }, [profile.blindDates, blindDatesFetched])};
+            
+
     return (
         <div className=" px-8 pt-8 m-auto">
             <div className="flex items-center justify-between pb-8">
@@ -168,14 +200,13 @@ const Friends = (props) => {
                         </span>
                     </div>
                 </div>
-                <div
-                    className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-dText font-bold" onClick={navToHome}>Home</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold" onClick={navToProfile}>Proflie</span>
+                        <span className="text-dText font-bold" onClick={navToProfile}>Profile</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
@@ -235,10 +266,7 @@ const Friends = (props) => {
                                 </div>
                             </div>
                             )}
-
                             </div>
-
-
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 About Me :
                             </h4>
@@ -294,12 +322,27 @@ const Friends = (props) => {
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
-                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+blindDate._id}>{blindDate.Name}</Link>
+                                        {isBlindDate?(
+                                            <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                                                <div className="cursor-pointer hover:scale-110 duration-200">
+                                                </div>
+                                            </div>
+                                        ):(
+                                            <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                                            <div className="cursor-pointer hover:scale-110 duration-200">
+                                                <span className="text-dText font-bold " onClick={addBlindDate}>
+                                                    Add Blind Date
+                                                </span>
+                                            </div>
+                                        </div>
+                                        )}
+
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+blindDate._id}>{blindDate.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">
                                 <div className="rounded-xl flex relative mb-4">
-                                    <p className="text-dText font-semibold text-sm">Let's be friends!</p>
+                                    <p className="text-dText font-semibold text-sm">missing friends</p>
                                 </div>
                             </div>
                         )}
@@ -319,7 +362,7 @@ const Friends = (props) => {
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
-                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.aboutMe}</Link>
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">
