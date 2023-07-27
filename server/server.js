@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-// app.use(cors());
 
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
@@ -13,8 +12,6 @@ app.use(cookieParser());
 
 require("./routes/User.routes")(app);
 require("./routes/Profile.routes")(app);
-
-console.log(process.env.DB_PORT);
 
 app.listen(process.env.DB_PORT, () =>
     console.log("The server is all fired up")
