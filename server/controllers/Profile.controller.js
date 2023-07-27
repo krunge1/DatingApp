@@ -23,7 +23,7 @@ module.exports = {
                         res.json({message: 'User Login Error', error: err});
                     }
                     else{
-                        Profile.create({...req.body, user: _id})
+                        Profile.create({...req.body, user: _id, name: userData.name})
                         .then((newProfile) => {
                             res.json(newProfile)
                         })
@@ -94,7 +94,7 @@ module.exports = {
             Profile.findOne({user: loggedInUserId})
             // console.log(userProfile)
             .then((userProfile) => {
-                res.json(userProfile)
+                res.json(userProfile, )
             })
             .catch((err) => {
                 res.status(500).json({message: 'Something went wrong', error: err})
