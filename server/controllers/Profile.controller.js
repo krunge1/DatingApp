@@ -124,7 +124,7 @@ module.exports = {
                 return res.status(400).json({message: "User does not own profile."})
             }
             //if user owns, make update
-            Profile.findOneAndUpdate({_id: req.params.id}, req.body, {new: true, runValidators: true})
+            Profile.findOneAndUpdate({_id: req.params.id}, {...req.body, name: userData.name}, {new: true, runValidators: true})
             .then((updateProfile) => {
                 res.json(updateProfile)
             })

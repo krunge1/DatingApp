@@ -34,7 +34,7 @@ const RegisterForm = (props) => {
             .then((res) => {
                 {
                     console.log(res.data);
-                    navigate("/dashboard");
+                    navigate("/profile");
                 }
             })
             .catch((err) => {

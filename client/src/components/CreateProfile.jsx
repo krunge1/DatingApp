@@ -14,7 +14,7 @@ const CreateProfile = (props) => {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
-    const [zipcode, setZipCode] = useState("");
+    const [zipCode, setZipCode] = useState("");
     const [interest, setInterest] = useState([]);
 
     const [errors, setErrors] = useState({});
@@ -42,15 +42,22 @@ const CreateProfile = (props) => {
         axios
             .post(
                 "http://localhost:8000/api/datingapp/profiles/create",
-                formState,
                 {
-                    withCredentials: true,
-                }
-            )
+                    aboutMe,
+                    gender,
+                    sexualOrientation,
+                    address,
+                    city,
+                    state,
+                    zipCode,
+                    // pictures,
+                    interest
+                },
+                {withCredentials: true})
             .then((res) => {
                 {
                     console.log(res.data);
-                    navigate("/profile/" + res.data._id);
+                    navigate("/profile/userProfile");
                 }
             })
             .catch((err) => {
@@ -265,7 +272,7 @@ const CreateProfile = (props) => {
                                 type="text"
                                 name="zipCode"
                                 onChange={(e) => setZipCode(e.target.value)}
-                                value={zipcode}
+                                value={zipCode}
                             />
                         </div>
                         {errors.zipCode ? (
