@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Interest from "./Interest";
 
 const CreateProfile = (props) => {
     const navigate = useNavigate();
+
+    const [aboutMe, setAboutMe] = useState("");
+    const [gender, setGender] = useState("");
+    const [sexualOrientation, setSexualOrientation] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zipcode, setZipCode] = useState("");
+    const [interest, setInterest] = useState([]);
+
+    const [errors, setErrors] = useState({});
+
     const logout = () => {
         axios
             .post(
@@ -21,6 +34,40 @@ const CreateProfile = (props) => {
                 console.log(err);
             });
     };
+
+    const handleSubmit = (e) => {
+        console.log("is this working?");
+        e.preventDefault();
+
+        axios
+            .post(
+                "http://localhost:8000/api/datingapp/profiles/create",
+                formState,
+                {
+                    withCredentials: true,
+                }
+            )
+            .then((res) => {
+                {
+                    console.log(res.data);
+                    navigate("/profile/" + res.data._id);
+                }
+            })
+            .catch((err) => {
+                {
+                    console.log(err.response.data.error.errors);
+                    setErrors(err.response.data.error.errors);
+                }
+            });
+    };
+
+    function genderSelected(e) {
+        setGender(e.target.value);
+    }
+
+    function sexualOrientationSelected(e) {
+        setSexualOrientation(e.target.value);
+    }
 
     return (
         <div className="flex flex-col">
@@ -41,37 +88,63 @@ const CreateProfile = (props) => {
                     </div>
                 </div>
             </div>
-            <form action="" className=" justify-self-center w-[90%] m-auto ">
+            <form
+                onSubmit={handleSubmit}
+                className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
-                        htmlFor="email">
+                        htmlFor="aboutMe">
                         About&nbsp;Me
                     </label>
-                    <textarea name="" id="" cols="30" rows="5"></textarea>
+                    <textarea
+                        onChange={(e) => setAboutMe(e.target.value)}
+                        value={aboutMe}
+                        name="aboutMe"
+                        id=""
+                        cols="30"
+                        rows="5"></textarea>
                 </div>
                 <div className="justify-around m-auto flex items-center gap-4 my-2  max-w-[780px]">
                     <h3
                         className="text-dText/50 font-semibold text-md mr-4"
-                        htmlFor="email">
-                        Gernder
+                        htmlFor="gender">
+                        Gender
                     </h3>
                     <div className="grid sm:grid-cols-2 md:grid-cols-4">
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="male" />
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="male"
+                                checked={gender === "male"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 male
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="female" />
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="female"
+                                checked={gender === "female"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 female
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="other" />
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="other"
+                                checked={gender === "other"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 other
                             </label>
@@ -81,6 +154,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="gender"
                                 value="notState"
+                                checked={gender === "notState"}
+                                onChange={genderSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -98,6 +173,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="straight"
+                                checked={sexualOrientation === "straight"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 straight
@@ -108,6 +185,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="gay"
+                                checked={sexualOrientation === "gay"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 gay
@@ -118,6 +197,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="bi"
+                                checked={sexualOrientation === "bi"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 bi
@@ -128,6 +209,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="notState"
+                                checked={sexualOrientation === "notState"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -140,7 +223,13 @@ const CreateProfile = (props) => {
                         <label className="text-dText/50 font-semibold text-sm">
                             Address
                         </label>
-                        <input className="text-dText" type="text" name="name" />
+                        <input
+                            className="text-dText"
+                            type="text"
+                            name="address"
+                            onChange={(e) => setAddress(e.target.value)}
+                            value={address}
+                        />
                     </div>
                     <div className="grid md:grid-cols-3 gap-4 w-full py-2">
                         <div className="flex items-center gap-2">
@@ -150,7 +239,9 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="city"
+                                onChange={(e) => setCity(e.target.value)}
+                                value={city}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -160,7 +251,9 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="state"
+                                onChange={(e) => setState(e.target.value)}
+                                value={state}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -170,9 +263,19 @@ const CreateProfile = (props) => {
                             <input
                                 className="text-dText"
                                 type="text"
-                                name="name"
+                                name="zipCode"
+                                onChange={(e) => setZipCode(e.target.value)}
+                                value={zipcode}
                             />
                         </div>
+                        {errors.zipCode ? (
+                            <p className="font-semibold text-sm text-red-400">
+                                {" "}
+                                {errors.zipCode.message}{" "}
+                            </p>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
                 <div className="PHOTO">
@@ -220,7 +323,7 @@ const CreateProfile = (props) => {
                     {/* <input className="text-dText" type="text" name="name" /> */}
                     <input type="file" multiple className="hidden" />
                     <div className="flex justify-center hover:scale-110 duration-200 cursor-pointer gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                        <span className="text-dText font-bold ">Brows</span>
+                        <span className="text-dText font-bold ">Browse</span>
                         {/* </div> */}
                     </div>
                 </div>
@@ -228,51 +331,16 @@ const CreateProfile = (props) => {
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">
                         Interests
                     </h3>
-                    <div className="grid sm:grid-cols-2 md:grid-cols-6">
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="sport" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                sport
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="reading" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                reading
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="hiking" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                hiking
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="coding" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                coding
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="miniGolf" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                mini golf
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="etc" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                etc
-                            </label>
-                        </div>
-                    </div>
+                    <Interest selected={interest} onChange={setInterest} />
                 </div>
                 <div className="flex justify-end mt-4">
                     <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
                         <div className="cursor-pointer hover:scale-110 duration-200 ">
-                            <span className="text-dText font-bold">
+                            <button
+                                className="text-dText font-bold"
+                                type="submit">
                                 Create Account
-                            </span>
+                            </button>
                         </div>
                     </div>
                 </div>
