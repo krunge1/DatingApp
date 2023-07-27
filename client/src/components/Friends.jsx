@@ -1,10 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from 'react'
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import mapImg from "../assets/testImages/busch_stadium.jpg"
 import axios from "axios";
 
 const Friends = (props) => {
+    const {id} = useParams();
     const navigate = useNavigate();
+
+    const [userProfile, setUserProfile] = useState({});
+    const [profile, setProfile] = useState({});
+    const [friends, setFriends] = useState([]);
+    const [friendsFetched, setFriendsFetched] = useState(false);
+    const [blindDates, setBlindDates] = useState([]);
+    const [blindDatesFetched, setBlindDatesFetched] = useState([]);
+    const [isFriend, setIsFriend] = useState(false);
+
+    
     const logout = () => {
         axios
             .post(
@@ -24,6 +37,102 @@ const Friends = (props) => {
     function navToHome() {
         navigate("/dashboard");
     }
+
+    function navToProfile() {
+        navigate("/profile/userProfile");
+    }
+
+    // Get method to pull in the profile info of logged in user
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/api/datingapp/userProfile", {
+                withCredentials: true
+            })
+            .then(res => {
+                console.log(res.data)
+                setUserProfile(res.data)
+                // Check if viewed profile ID is in the friend list of the logged-in user
+                if (res.data.friend && res.data.friend.includes(id)) {
+                    setIsFriend(true);
+                } else {
+                    setIsFriend(false);
+                }
+            })
+            .catch(err => console.log(err))
+        },[])
+    
+
+    //Get method to pull in the viewing profile information and assign variables
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/datingapp/profiles/'+id, {
+            withCredentials: true
+        })
+        .then(res => {
+            console.log(res.data);
+            setProfile(res.data);
+        })
+        .catch(err => console.log(err))
+    },[])
+
+    // Function to fetch friend's profile by ID
+    useEffect(() => {
+        const fetchFriendProfile = (friendId) => {
+        axios
+            .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
+            .then((res) => {
+            console.log(res.data);
+            setFriends((prevFriends) => [...prevFriends, res.data]);
+            })
+            .catch((err) => {
+            console.log(err);
+            });
+        };
+    
+        // Check if there are friends in the profile
+        if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
+            // Randomize the order of friends
+            const shuffledFriends = profile.friend.sort(() => Math.random() - 0.5);
+    
+            // Slice the first two friends from the shuffled array
+            const selectedFriends = shuffledFriends.slice(0, 2);
+    
+            // Loop through each friend and fetch their profile
+            selectedFriends.forEach((friendId) => {
+            fetchFriendProfile(friendId);
+            });
+            setFriendsFetched(true);
+        }
+    }, [profile.friend, friendsFetched]);   
+
+    // Function to fetch blind date' s profile by ID
+    useEffect(() => { 
+        const fetchBlindDateProfile = (blindDateId) => {
+        axios
+            .get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
+            .then((res) => {
+            console.log(res.data);
+            setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+            })
+            .catch((err) => {
+            console.log(err);
+            });
+        };
+        // Check if there are blind dates in the profile
+        if (profile.blindDate && profile.blindDate.length > 0 && !blindDatesFetched) {
+            // Randomize the order of friends
+            const shuffledBlindDates = profile.blindDate.sort(() => Math.random() - 0.5);
+    
+            // Slice the first two friends from the shuffled array
+            const selectedBlindDates = shuffledBlindDates.slice(0, 2);
+    
+            // Loop through each friend and fetch their profile
+            selectedBlindDates.forEach((blindDateId) => {
+            fetchBlindDateProfile(blindDateId);
+            });
+            setBlindDatesFetched(true);
+        }
+    }, [profile.blindDate, blindDatesFetched]);  
+
     return (
         <div className=" px-8 pt-8 m-auto">
             <div className="flex items-center justify-between pb-8">
@@ -36,14 +145,13 @@ const Friends = (props) => {
                     </div>
                 </div>
                 <div
-                    onClick={navToHome}
                     className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold ">Home</span>
+                        <span className="text-dText font-bold" onClick={navToHome}>Home</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold ">Proflie</span>
+                        <span className="text-dText font-bold" onClick={navToProfile}>Proflie</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
@@ -85,6 +193,8 @@ const Friends = (props) => {
                                         <h2 className="text-dText">Name</h2>
                                     </div>
                                 </div>
+
+                            {isFriend?(
                                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                     <div className="cursor-pointer hover:scale-110 duration-200">
                                         <span className="text-dText font-bold ">
@@ -92,22 +202,24 @@ const Friends = (props) => {
                                         </span>
                                     </div>
                                 </div>
+                            ):(
+                                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                                <div className="cursor-pointer hover:scale-110 duration-200">
+                                    <span className="text-dText font-bold ">
+                                        Add Friend
+                                    </span>
+                                </div>
                             </div>
+                            )}
+
+                            </div>
+
+
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 About Me :
                             </h4>
                             <p className="text-sm leading-7 text-slate-500">
-                                Morbi varius nisl nec pretium iaculis. In hac
-                                habitasse platea dictumst. Vivamus lobortis dui
-                                et ullamcorper aliquam. Sed porttitor convallis
-                                ante in rhoncus. Vestibulum dapibus vel lacus eu
-                                varius. Morbi et lobortis lorem. Suspendisse
-                                porta mattis rutrum. Praesent tincidunt et nulla
-                                sit amet fringilla. Fusce at maximus nisi, vitae
-                                semper eros. Phasellus sit amet ultrices purus.
-                                Sed sit amet purus aliquet, bibendum elit eget,
-                                vulputate sapien. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
+                                {profile.aboutMe}
                             </p>
                         </div>
                     </div>
@@ -116,25 +228,29 @@ const Friends = (props) => {
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 Where I'm At :
                             </h4>
-                            <div className="bg-gray-200 w-full h-[300px]"></div>
+                            <div className="bg-gray-200 w-full h-[300px]">
+                            <img
+                                        src={mapImg}
+                                        alt=""
+                                        className="object-cover rounded-xl w-full"
+                                    />
+                            </div>
                         </div>
                         <div className="top-bottom-right mb-8">
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 Interest :
                             </h4>
-                            <p className="text-sm leading-7 text-slate-500">
-                                Morbi varius nisl nec pretium iaculis. In hac
-                                habitasse platea dictumst. Vivamus lobortis dui
-                                et ullamcorper aliquam. Sed porttitor convallis
-                                ante in rhoncus. Vestibulum dapibus vel lacus eu
-                                varius. Morbi et lobortis lorem. Suspendisse
-                                porta mattis rutrum. Praesent tincidunt et nulla
-                                sit amet fringilla. Fusce at maximus nisi, vitae
-                                semper eros. Phasellus sit amet ultrices purus.
-                                Sed sit amet purus aliquet, bibendum elit eget,
-                                vulputate sapien. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
-                            </p>
+                            {profile.interests ? (
+                                <ul className="list-disc pl-6">
+                                {profile.interests.map((interest, index) => (
+                                    <li className="text-sm leading-7 text-slate-500" key={index}>
+                                    {interest}
+                                    </li>
+                                ))}
+                                </ul>
+                                ) : (
+                                <p>No interests available.</p>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -144,64 +260,50 @@ const Friends = (props) => {
                         <h4 className="font-semibold text-md text-slate-600 my-2">
                             Recommend a Blind Date :
                         </h4>
-                        <div className="md:grid md:grid-cols-2 gap-8">
-                            <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
+                        {blindDates && blindDates.length > 0 ? (
+                                blindDates.map((blindDate, index) => (
+                                <div className="flex items-center gap-16" key={index}>
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+blindDate._id}>{blindDate.Name}</Link>
                                 </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
-                            </div>
+                                ))) : (
                             <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
+                                <div className="rounded-xl flex relative mb-4">
+                                    <p className="text-dText font-semibold text-sm">Let's be friends!</p>
                                 </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
                             </div>
-                        </div>
+                        )}
                     </div>
                     <hr className="mb-8" />
                     <div className="bottom-bottom mb-8">
                         <h4 className="font-semibold text-md text-slate-600 my-2">
                             My Friends :
                         </h4>
-                        <div className="md:grid md:grid-cols-2 gap-8">
-                            <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
+                        {friends && friends.length > 0 ? (
+                                friends.map((friend, index) => (
+                                <div className="flex items-center gap-16" key={index}>
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.aboutMe}</Link>
                                 </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
-                            </div>
+                                ))) : (
                             <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
+                                <div className="rounded-xl flex relative mb-4">
+                                    <p className="text-dText font-semibold text-sm">Will you please be my friend!</p>
                                 </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
