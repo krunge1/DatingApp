@@ -94,7 +94,7 @@ module.exports = {
             Profile.findOne({user: loggedInUserId})
             // console.log(userProfile)
             .then((userProfile) => {
-                res.json(userProfile, )
+                res.json(userProfile)
             })
             .catch((err) => {
                 res.status(500).json({message: 'Something went wrong', error: err})
