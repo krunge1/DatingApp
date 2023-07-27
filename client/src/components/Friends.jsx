@@ -151,7 +151,7 @@ const Friends = (props) => {
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold" onClick={navToProfile}>Proflie</span>
+                        <span className="text-dText font-bold" onClick={navToProfile}>Profile</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
@@ -190,7 +190,7 @@ const Friends = (props) => {
                             <div className="flex items-center justify-between">
                                 <div className="">
                                     <div className="flex justify-center gap-1">
-                                        <h2 className="text-dText">Name</h2>
+                                        <h2 className="text-dText">{profile.name}</h2>
                                     </div>
                                 </div>
 

@@ -16,6 +16,7 @@ const CreateProfile = (props) => {
     const [state, setState] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [interest, setInterest] = useState([]);
+    const [name, setName] = useState([]);
 
     const [errors, setErrors] = useState({});
 
@@ -51,7 +52,8 @@ const CreateProfile = (props) => {
                     state,
                     zipCode,
                     // pictures,
-                    interest
+                    interest,
+                    name
                 },
                 {withCredentials: true})
             .then((res) => {
@@ -99,6 +101,18 @@ const CreateProfile = (props) => {
                 onSubmit={handleSubmit}
                 className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
+                <div className="flex items-center gap-2 ">
+                        <label className="text-dText/50 font-semibold text-sm">
+                            Profile Name
+                        </label>
+                        <input
+                            className="text-dText"
+                            type="text"
+                            name="name"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                        />
+                    </div>
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
