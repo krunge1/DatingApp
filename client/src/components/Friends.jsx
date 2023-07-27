@@ -336,7 +336,6 @@ useEffect(() => {
                                             </div>
                                         </div>
                                         )}
-
                                         <Link className="text-dText font-semibold text-sm" to={"/friends/"+blindDate._id}>{blindDate.name}</Link>
                                 </div>
                                 ))) : (
