@@ -4,7 +4,7 @@ import testImg from "../assets/testImages/titann.jpg";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const Dashboard = (props) => {
+const Dashboard = () => {
     const navigate = useNavigate();
     const logout = () => {
         axios
@@ -22,30 +22,93 @@ const Dashboard = (props) => {
             });
     };
 
+    const [profile, setProfile] = useState({});
     const [friends, setFriends] = useState({});
+    const [friendsFetched, setFriendsFetched] = useState(false);
     const [blindDates, setBlindDates] = useState({});
-    const [profileID, setProfileID] = useState({});
+    const [blindDatesFetched, setBlindDatesFetched] = useState(false);
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
 
-    // console.log(getRandomInt(4));
-
     // Dashboard page needs to pull in the profile info of logged in user
     useEffect(() => {
+        axios.get("http://localhost:8000/api/datingapp/userProfile", {
+            withCredentials: true
+        })
+        .then((res) => {
+            console.log(res.data);
+            setProfile(res.data);
+                // setFriends(res.data.friend);
+                // setBlindDates(res.data.blindDate);
+                // setProfileID(res.data._id);
+                // console.log(friends);
+                // console.log(blindDates);
+        })
+        .catch((err) => {console.log(err);
+        });
+    }, []);
+
+    useEffect(() => {
+        // Function to fetch friend's profile by ID
+        const fetchFriendProfile = (friendId) => {
         axios
-            .get("http://localhost:8000/api/datingapp/userProfile")
+            .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
-                setFriends(res.data.friend);
-                setBlindDates(res.data.blindDate);
-                setProfileID(res.data._id);
-                console.log(friends);
-                console.log(blindDates);
+            console.log(res.data);
+            setFriends((prevFriends) => [...prevFriends, res.data]);
             })
-            .catch((err) => console.log(err));
-    }, [blindDates, friends]);
+            .catch((err) => {
+            console.log(err);
+            });
+        };
+    
+        // Check if there are friends in the profile
+        if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
+            // Randomize the order of friends
+            const shuffledFriends = profile.friend.sort(() => Math.random() - 0.5);
+    
+            // Slice the first two friends from the shuffled array
+            const selectedFriends = shuffledFriends.slice(0, 2);
+    
+            // Loop through each friend and fetch their profile
+            selectedFriends.forEach((friendId) => {
+            fetchFriendProfile(friendId);
+            });
+            setFriendsFetched(true);
+        }
+    }, [profile.friend, friendsFetched]);
+
+    useEffect(() => {
+        // Function to fetch blinddate's profile by ID
+        const fetchBlindDateProfile = (dateId) => {
+        axios
+            .get(`http://localhost:8000/api/datingapp/profiles/${dateId}`, { withCredentials: true })
+            .then((res) => {
+            console.log(res.data);
+            setBlindDates((prevDates) => [...prevDates, res.data]);
+            })
+            .catch((err) => {
+            console.log(err);
+            });
+        };
+    
+        // Check if there are blindDates in the profile
+        if (profile.blindDate && profile.blindDate.length > 0 && !blindDatesFetched) {
+            // Randomize the order of dates
+            const shuffledBlindDates = profile.blindDate.sort(() => Math.random() - 0.5);
+    
+            // Slice the first two dates(lol) from the shuffled array
+            const selectedBlindDates = shuffledBlindDates.slice(0, 2);
+    
+            // Loop through each date and fetch their profile
+            selectedBlindDates.forEach((dateId) => {
+            fetchBlindDateProfile(dateId);
+            });
+            setBlindDatesFetched(true);
+        }
+    }, [profile.blindDate, blindDatesFetched]);
 
     return (
         <div>
@@ -61,7 +124,7 @@ const Dashboard = (props) => {
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-dText font-bold ">
-                            <Link to={"/profile/" + profileID}>Profile</Link>
+                            <Link to="/profile/userProfile">Profile</Link>
                         </span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
@@ -86,7 +149,28 @@ const Dashboard = (props) => {
                             <div className="items-center grid grid-cols-2 mx-auto mt-4">
                                 {/* BUT *THIS HEIGHT IS TO LIMITED THE HEIGHT OF PICTURE */}
                                 {/* THESE 6 DIVs SHOULD BE REDUCE TO ONLY 1 AND USE 'map' TO ITERATE  */}
-                                {blindDates.map((date, index) => {
+                                {blindDates && blindDates.length > 0 ? (
+                                    blindDates.map((date, index) => (
+                                    <div
+                                        key={index}
+                                        className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                        <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                            <img
+                                                // src={testImg}
+                                                // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                                src={date.pictures[0]}
+                                                alt={"profile picture of " + date.name}
+                                                className="object-cover rounded-xl w-full"
+                                            />
+                                        </div>
+                                        <h3 className="text-dText font-semibold text-sm">
+                                            <Link to={"/friends/" + date._id}>{date.name}</Link>
+                                        </h3>
+                                    </div>
+                                ))) : (
+                                    <p>No recommendations yet</p>
+                                )}
+                                {/* {blindDates.map((date, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -105,7 +189,7 @@ const Dashboard = (props) => {
                                             </h3>
                                         </div>
                                     );
-                                })}
+                                })} */}
 
                                 {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH BLIND DATES TO TEST 'map' ABOVE */}
                                 {/* <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
@@ -155,7 +239,30 @@ const Dashboard = (props) => {
                         <p className="text-secondary mx-8 text-lg font-bold ">
                             Find New Friends
                         </p>
-                        {friends.map((friend, index) => {
+                        {friends && friends.length > 0 ? (
+                            friends.map((friend, index) => {
+                                const thisFriend = friend.friend[getRandomInt(friend.length)];
+                                return (
+                                <div
+                                    key={index}
+                                    className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
+                                        <img
+                                            // src={testImg}
+                                            // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                            src={thisFriend.pictures[0]}
+                                            alt={"profile picture of " + thisFriend.name}
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                    <h3 className="text-dText font-semibold text-sm">
+                                        <Link to={"/friends/" + thisFriend._id}>{thisFriend.name}</Link>
+                                    </h3>
+                                </div>
+                            );})) : (
+                                <p>Time to make some friends</p>
+                            )}
+                        {/* {friends.map((friend, index) => {
                             const thisFriend =
                                 friend.friend[getRandomInt(friend.length)];
                             return (
@@ -176,7 +283,7 @@ const Dashboard = (props) => {
                                     </h3>
                                 </div>
                             );
-                        })}
+                        })} */}
                         {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH FRIENDS OF FRIENDS TO TEST 'map' ABOVE */}
                         {/* <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
                             <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
@@ -221,8 +328,8 @@ const Dashboard = (props) => {
                             FRIEND LIST
                         </p>
 
-                        {friends.map((friend, index) => {
-                            return (
+                        {friends && friends.length > 0 ? (
+                            friends.map((friend, index) => (
                                 <div
                                     key={index}
                                     className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
@@ -231,16 +338,17 @@ const Dashboard = (props) => {
                                             // src={testImg}
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
                                             src={friend.pictures[0]}
-                                            alt="profile picture of {friend.user.name}"
+                                            alt={"profile picture of " + friend.name}
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
                                     <h3 className="text-dText font-semibold text-sm">
-                                        {friend.user.name}
+                                    <Link to={"/friends/" + friend._id}>{friend.name}</Link>
                                     </h3>
                                 </div>
-                            );
-                        })}
+                            ))) : (
+                                <p>Time to add some friends</p>
+                            )}
 
                         {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH FRIENDS TO TEST 'map' ABOVE */}
                         {/* <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
