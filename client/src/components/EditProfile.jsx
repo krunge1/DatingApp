@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import Interest from "./Interest";
 
 const EditProfile = () => {
     const {id} = useParams();
@@ -16,10 +17,14 @@ const EditProfile = () => {
     const [state, setState] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [pictures, setPictures] = useState([]);
-    const [interest, setInterest] = useState([]);
+    const [interests, setInterests] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState([]);
 
     const [errors, setErrors] = useState({});
 
+    const handleInterestChange = (selectedInterests) => {
+        setSelectedInterests(selectedInterests);
+        };
 
     const logout = () => {
         axios
@@ -61,7 +66,7 @@ const EditProfile = () => {
             setState(res.data.state)
             setZipCode(res.data.zipCode)
             setPictures(res.data.pictures)
-            setInterest(res.data.interest)
+            // setInterests(res.data.interest)
             console.log(res.data)
         })
         .catch(err => console.log(err))
@@ -78,7 +83,7 @@ const EditProfile = () => {
             state,
             zipCode,
             pictures,
-            interest
+            interests
         },
         {withCredentials: true})
         .then(res => {
@@ -94,7 +99,7 @@ const EditProfile = () => {
         setState("");
         setZipCode("");
         setPictures([]);
-        setInterest([]);
+        setInterests([]);
     }
 
     const handleAboutMe = (e) => {
@@ -386,44 +391,7 @@ const EditProfile = () => {
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">
                         Interests
                     </h3>
-                    <div className="grid sm:grid-cols-2 md:grid-cols-6">
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="sport" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                sport
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="reading" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                reading
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="hiking" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                hiking
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="coding" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                coding
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="miniGolf" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                mini golf
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="etc" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                etc
-                            </label>
-                        </div>
-                    </div>
+                    <Interest selected={interests} onChange={setInterests} />
                 </div>
                 <div className="flex justify-end mt-4">
                     <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">

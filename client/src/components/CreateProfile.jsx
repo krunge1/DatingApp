@@ -15,8 +15,7 @@ const CreateProfile = (props) => {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zipCode, setZipCode] = useState("");
-    const [interest, setInterest] = useState([]);
-    const [name, setName] = useState([]);
+    const [interests, setInterests] = useState([]);
 
     const [errors, setErrors] = useState({});
 
@@ -52,8 +51,7 @@ const CreateProfile = (props) => {
                     state,
                     zipCode,
                     // pictures,
-                    interest,
-                    name
+                    interests
                 },
                 {withCredentials: true})
             .then((res) => {
@@ -352,7 +350,7 @@ const CreateProfile = (props) => {
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">
                         Interests
                     </h3>
-                    <Interest selected={interest} onChange={setInterest} />
+                    <Interest selected={interests} onChange={setInterests} />
                 </div>
                 <div className="flex justify-end mt-4">
                     <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">

@@ -131,7 +131,31 @@ const Friends = (props) => {
             });
             setBlindDatesFetched(true);
         }
-    }, [profile.blindDate, blindDatesFetched]);  
+    }, [profile.blindDate, blindDatesFetched]);
+
+    const addFriend = (e) => {
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/datingapp/profiles/addFriend/${userProfile._id}/${id}`, {}, { withCredentials: true })
+        .then (res => {
+        console.log(res.data);
+        setFriends((prevFriends) => [...prevFriends, res.data]);
+        setIsFriend(true);
+        })
+        .catch((err) => {
+        console.log(err);
+        }, [profile.friend, friendsFetched])};
+
+    const removeFriend = (e) => {
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/datingapp/profiles/removeFriend/${userProfile._id}/${id}`, {}, { withCredentials: true })
+        .then (res => {
+        console.log(res.data);
+        setFriends((prevFriends) => prevFriends.filter((friend) => friend._id !== id));
+        setIsFriend(false);
+        })
+        .catch((err) => {
+        console.log(err);
+        }, [profile.friend, friendsFetched])};
 
     return (
         <div className=" px-8 pt-8 m-auto">
@@ -197,7 +221,7 @@ const Friends = (props) => {
                             {isFriend?(
                                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                     <div className="cursor-pointer hover:scale-110 duration-200">
-                                        <span className="text-dText font-bold ">
+                                        <span className="text-dText font-bold" onClick={removeFriend}>
                                             Remove Friend
                                         </span>
                                     </div>
@@ -205,7 +229,7 @@ const Friends = (props) => {
                             ):(
                                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                 <div className="cursor-pointer hover:scale-110 duration-200">
-                                    <span className="text-dText font-bold ">
+                                    <span className="text-dText font-bold " onClick={addFriend}>
                                         Add Friend
                                     </span>
                                 </div>
@@ -300,7 +324,7 @@ const Friends = (props) => {
                                 ))) : (
                             <div className="flex items-center gap-16">
                                 <div className="rounded-xl flex relative mb-4">
-                                    <p className="text-dText font-semibold text-sm">Will you please be my friend!</p>
+                                    <p className="text-dText font-semibold text-sm">Man I need some friends!</p>
                                 </div>
                             </div>
                         )}

@@ -148,6 +148,7 @@ module.exports = {
             const loggedInUserId = userData._id;
             // Find the profile by ID and check if the logged-in user owns it
             const profile = await Profile.findById(req.params.id);
+            // const friendProfile = await Profile.findById(req.params.friendId)
             // console.log(profile._id)
             if (!profile) {
                 return res.status(400).json({ message: 'Profile not found' });
@@ -162,7 +163,9 @@ module.exports = {
             if (existingFriend) {
                 return res.status(400).json({message: 'Friend already added'});
             }
+            // friendProfile.friend.push(loggedInUserId);
             profile.friend.push(friendId);
+            // await friendProfile.save()
             await profile.save();
             res.json(profile);
         }catch (err){
