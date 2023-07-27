@@ -19,7 +19,7 @@ module.exports = {
                 const newUser = await User.create(req.body);
                 //generating a usertoken and storing the id and email of the new user
                 const userToken = jwt.sign(
-                    { _id: newUser._id, email: newUser.email },
+                    { _id: newUser._id, email: newUser.email, name: newUser.name },
                     secret,
                     { expiresIn: "2h" }
                 );
@@ -49,7 +49,7 @@ module.exports = {
                 if (passwordMatch) {
                     // generate userToken
                     const userToken = jwt.sign(
-                        { _id: user._id, email: user.email },
+                        { _id: user._id, email: user.email, name: user.name },
                         secret,
                         { expiresIn: "2h" }
                     );
