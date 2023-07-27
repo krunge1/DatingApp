@@ -20,6 +20,10 @@ const Friends = (props) => {
                 console.log(err);
             });
     };
+
+    function navToHome() {
+        navigate("/dashboard");
+    }
     return (
         <div className=" px-8 pt-8 m-auto">
             <div className="flex items-center justify-between pb-8">
@@ -31,7 +35,9 @@ const Friends = (props) => {
                         </span>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                <div
+                    onClick={navToHome}
+                    className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-dText font-bold ">Home</span>
                     </div>

@@ -21,6 +21,10 @@ const Profile = (props) => {
             });
     };
 
+    function navToHome() {
+        navigate("/dashboard");
+    }
+
     return (
         <div className=" px-8 pt-8 m-auto mb-8">
             <div className="flex items-center justify-between pb-8">
@@ -33,7 +37,9 @@ const Profile = (props) => {
                     </div>
                 </div>
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                    <div className="cursor-pointer hover:scale-110 duration-200">
+                    <div
+                        onClick={navToHome}
+                        className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-dText font-bold ">Home</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
