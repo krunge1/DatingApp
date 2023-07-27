@@ -1,7 +1,7 @@
 const multer = require("multer");
 const fs = require("fs");
 
-const uploadMiddleware = multer({ dest: "uploads/" });
+const uploadMiddleware = multer({ dest: "uploads" });
 
 const fileUpload = (req, res, next) => {
 uploadMiddleware.array("pictures", 100)(req, res, (err) => {
@@ -19,7 +19,7 @@ uploadMiddleware.array("pictures", 100)(req, res, (err) => {
         const extension = parts[parts.length - 1];
         const newPath = `${path}.${extension}`;
         fs.renameSync(path, newPath);
-        return newPath.replace("uploads/", "");
+        return newPath.replace("/uploads/g","");
     } else {
         return null;
     }

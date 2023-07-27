@@ -1,7 +1,9 @@
+import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
-import { useNavigate } from "react-router-dom";
+import mapImg from "../assets/testImages/busch_stadium.jpg"
+import { useNavigate, Link } from "react-router-dom";
 
 const Profile = (props) => {
     const navigate = useNavigate();
@@ -20,6 +22,55 @@ const Profile = (props) => {
                 console.log(err);
             });
     };
+
+    const [profile, setProfile] = useState({});
+    const [friends, setFriends] = useState([]);
+    const [friendsFetched, setFriendsFetched] = useState(false);
+
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/datingapp/userProfile", {
+            withCredentials: true
+        })
+        .then(res => {
+            console.log(res.data);
+            setProfile(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }, []);
+    
+    useEffect(() => {
+        // Function to fetch friend's profile by ID
+        const fetchFriendProfile = (friendId) => {
+        axios
+            .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
+            .then((res) => {
+            console.log(res.data);
+            setFriends((prevFriends) => [...prevFriends, res.data]);
+            })
+            .catch((err) => {
+            console.log(err);
+            });
+        };
+    
+        // Check if there are friends in the profile
+        if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
+            // Randomize the order of friends
+            const shuffledFriends = profile.friend.sort(() => Math.random() - 0.5);
+    
+            // Slice the first two friends from the shuffled array
+            const selectedFriends = shuffledFriends.slice(0, 2);
+    
+            // Loop through each friend and fetch their profile
+            selectedFriends.forEach((friendId) => {
+            fetchFriendProfile(friendId);
+            });
+            setFriendsFetched(true);
+        }
+    }, [profile.friend, friendsFetched]);   
+
+    
 
     return (
         <div className=" px-8 pt-8 m-auto mb-8">
@@ -74,7 +125,8 @@ const Profile = (props) => {
                             <div className="flex items-center justify-between">
                                 <div className="">
                                     <div className="flex justify-center gap-1">
-                                        <h2 className="text-dText">Name</h2>
+                                        <h2 className="text-dText">{profile.name}</h2>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -82,17 +134,7 @@ const Profile = (props) => {
                                 About Me :
                             </h4>
                             <p className="text-sm leading-7 text-slate-500">
-                                Morbi varius nisl nec pretium iaculis. In hac
-                                habitasse platea dictumst. Vivamus lobortis dui
-                                et ullamcorper aliquam. Sed porttitor convallis
-                                ante in rhoncus. Vestibulum dapibus vel lacus eu
-                                varius. Morbi et lobortis lorem. Suspendisse
-                                porta mattis rutrum. Praesent tincidunt et nulla
-                                sit amet fringilla. Fusce at maximus nisi, vitae
-                                semper eros. Phasellus sit amet ultrices purus.
-                                Sed sit amet purus aliquet, bibendum elit eget,
-                                vulputate sapien. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
+                                {profile.aboutMe}
                             </p>
                         </div>
                     </div>
@@ -101,25 +143,29 @@ const Profile = (props) => {
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 Where I'm At :
                             </h4>
-                            <div className="bg-gray-200 w-full h-[300px]"></div>
+                            <div className="bg-gray-200 w-full h-[300px]">
+                            <img
+                                        src={mapImg}
+                                        alt=""
+                                        className="object-cover rounded-xl w-full"
+                                    />
+                            </div>
                         </div>
                         <div className="top-bottom-right mb-8">
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 Interest :
                             </h4>
-                            <p className="text-sm leading-7 text-slate-500">
-                                Morbi varius nisl nec pretium iaculis. In hac
-                                habitasse platea dictumst. Vivamus lobortis dui
-                                et ullamcorper aliquam. Sed porttitor convallis
-                                ante in rhoncus. Vestibulum dapibus vel lacus eu
-                                varius. Morbi et lobortis lorem. Suspendisse
-                                porta mattis rutrum. Praesent tincidunt et nulla
-                                sit amet fringilla. Fusce at maximus nisi, vitae
-                                semper eros. Phasellus sit amet ultrices purus.
-                                Sed sit amet purus aliquet, bibendum elit eget,
-                                vulputate sapien. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
-                            </p>
+                            {profile.interests ? (
+                                <ul className="list-disc pl-6">
+                                {profile.interests.map((interest, index) => (
+                                    <li className="text-sm leading-7 text-slate-500" key={index}>
+                                    {interest}
+                                    </li>
+                                ))}
+                                </ul>
+                                ) : (
+                                <p>No interests available.</p>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -130,6 +176,19 @@ const Profile = (props) => {
                             My Friends :
                         </h4>
                         <div className="md:grid md:grid-cols-2 gap-8">
+                        {friends && friends.length > 0 ? (
+                                friends.map((friend, index) => (
+                                <div className="flex items-center gap-16" key={index}>
+                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
+                                        <img
+                                            src={testImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                    </div>
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.aboutMe}</Link>
+                                </div>
+                                ))) : (
                             <div className="flex items-center gap-16">
                                 <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
                                     <img
@@ -138,22 +197,8 @@ const Profile = (props) => {
                                         className="object-cover rounded-xl w-full"
                                     />
                                 </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
                             </div>
-                            <div className="flex items-center gap-16">
-                                <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
-                                    <img
-                                        src={testImg}
-                                        alt=""
-                                        className="object-cover rounded-xl w-full"
-                                    />
-                                </div>
-                                <h3 className="text-dText font-semibold text-sm">
-                                    Titann
-                                </h3>
-                            </div>
+                        )}
                         </div>
                     </div>
 
@@ -161,7 +206,7 @@ const Profile = (props) => {
                         <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
                             <div className="cursor-pointer hover:scale-110 duration-200 ">
                                 <span className="text-dText font-bold">
-                                    Edit Profile
+                                <Link className="text-dText font-semibold text-sm" to={"/profile/"+profile._id+"/edit"}>Edit Profile</Link>
                                 </span>
                             </div>
                         </div>

@@ -21,7 +21,7 @@ function App() {
                     <Route path="/register" element={<RegisterForm />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<CreateProfile />} />
-                    <Route path="/profile/:id" element={<Profile />} />
+                    <Route path="/profile/userProfile" element={<Profile />} />
                     <Route path="/profile/:id/edit" element={<EditProfile />} />
                     <Route path="/friends/:id" element={<Friends />} />
                     {/* <Route pathe="/dashboard" element={<HomePage/>}/> */}
