@@ -1,33 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Interest from "./Interest";
 
 const CreateProfile = (props) => {
     const navigate = useNavigate();
 
-    const [formState, setFormState] = useState({
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        aboutMe: "",
-        gender: "",
-        sexualOrientation: "",
-        pictures: [],
-        interests: []
-    });
-    
-    const [errors, setErrors] = useState({});
+    const [aboutMe, setAboutMe] = useState("");
+    const [gender, setGender] = useState("");
+    const [sexualOrientation, setSexualOrientation] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zipcode, setZipCode] = useState("");
+    const [interest, setInterest] = useState([]);
 
-    const onChangeHandler = (e) => {
-        e.preventDefault();
-        setFormState({
-            ...formState,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const [errors, setErrors] = useState({});
 
     const logout = () => {
         axios
@@ -50,9 +40,13 @@ const CreateProfile = (props) => {
         e.preventDefault();
 
         axios
-            .post("http://localhost:8000/api/datingapp/profiles/create", formState, {
-                withCredentials: true,
-            })
+            .post(
+                "http://localhost:8000/api/datingapp/profiles/create",
+                formState,
+                {
+                    withCredentials: true,
+                }
+            )
             .then((res) => {
                 {
                     console.log(res.data);
@@ -66,6 +60,14 @@ const CreateProfile = (props) => {
                 }
             });
     };
+
+    function genderSelected(e) {
+        setGender(e.target.value);
+    }
+
+    function sexualOrientationSelected(e) {
+        setSexualOrientation(e.target.value);
+    }
 
     return (
         <div className="flex flex-col">
@@ -86,7 +88,9 @@ const CreateProfile = (props) => {
                     </div>
                 </div>
             </div>
-            <form onSubmit={handleSubmit} className=" justify-self-center w-[90%] m-auto ">
+            <form
+                onSubmit={handleSubmit}
+                className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
@@ -94,7 +98,13 @@ const CreateProfile = (props) => {
                         htmlFor="aboutMe">
                         About&nbsp;Me
                     </label>
-                    <textarea onChange={onChangeHandler} name="aboutMe" value={formState.aboutMe} id="" cols="30" rows="5"></textarea>
+                    <textarea
+                        onChange={(e) => setAboutMe(e.target.value)}
+                        value={aboutMe}
+                        name="aboutMe"
+                        id=""
+                        cols="30"
+                        rows="5"></textarea>
                 </div>
                 <div className="justify-around m-auto flex items-center gap-4 my-2  max-w-[780px]">
                     <h3
@@ -104,19 +114,37 @@ const CreateProfile = (props) => {
                     </h3>
                     <div className="grid sm:grid-cols-2 md:grid-cols-4">
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="male" onChange={onChangeHandler}/>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="male"
+                                checked={gender === "male"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 male
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="female" onChange={onChangeHandler}/>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="female"
+                                checked={gender === "female"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 female
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="radio" name="gender" value="other" onChange={onChangeHandler}/>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="other"
+                                checked={gender === "other"}
+                                onChange={genderSelected}
+                            />
                             <label className="text-dText/50 font-semibold text-sm">
                                 other
                             </label>
@@ -126,7 +154,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="gender"
                                 value="notState"
-                                onChange={onChangeHandler}
+                                checked={gender === "notState"}
+                                onChange={genderSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -144,7 +173,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="straight"
-                                onChange={onChangeHandler}
+                                checked={sexualOrientation === "straight"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 straight
@@ -155,7 +185,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="gay"
-                                onChange={onChangeHandler}
+                                checked={sexualOrientation === "gay"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 gay
@@ -166,7 +197,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="bi"
-                                onChange={onChangeHandler}
+                                checked={sexualOrientation === "bi"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 bi
@@ -177,7 +209,8 @@ const CreateProfile = (props) => {
                                 type="radio"
                                 name="sexualOrientation"
                                 value="notState"
-                                onChange={onChangeHandler}
+                                checked={sexualOrientation === "notState"}
+                                onChange={sexualOrientationSelected}
                             />
                             <label className="text-dText/50 font-semibold text-sm">
                                 prefer not to state
@@ -190,7 +223,13 @@ const CreateProfile = (props) => {
                         <label className="text-dText/50 font-semibold text-sm">
                             Address
                         </label>
-                        <input className="text-dText" type="text" name="address" value={formState.address} onChange={onChangeHandler}/>
+                        <input
+                            className="text-dText"
+                            type="text"
+                            name="address"
+                            onChange={(e) => setAddress(e.target.value)}
+                            value={address}
+                        />
                     </div>
                     <div className="grid md:grid-cols-3 gap-4 w-full py-2">
                         <div className="flex items-center gap-2">
@@ -201,8 +240,8 @@ const CreateProfile = (props) => {
                                 className="text-dText"
                                 type="text"
                                 name="city"
-                                value={formState.city}
-                                onChange={onChangeHandler}
+                                onChange={(e) => setCity(e.target.value)}
+                                value={city}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -213,8 +252,8 @@ const CreateProfile = (props) => {
                                 className="text-dText"
                                 type="text"
                                 name="state"
-                                value={formState.state}
-                                onChange={onChangeHandler}
+                                onChange={(e) => setState(e.target.value)}
+                                value={state}
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -225,8 +264,8 @@ const CreateProfile = (props) => {
                                 className="text-dText"
                                 type="text"
                                 name="zipCode"
-                                value={formState.zipCode}
-                                onChange={onChangeHandler}
+                                onChange={(e) => setZipCode(e.target.value)}
+                                value={zipcode}
                             />
                         </div>
                         {errors.zipCode ? (
@@ -292,49 +331,14 @@ const CreateProfile = (props) => {
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">
                         Interests
                     </h3>
-                    <div className="grid sm:grid-cols-2 md:grid-cols-6">
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="sport" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                sport
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="reading" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                reading
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="hiking" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                hiking
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="coding" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                coding
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="miniGolf" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                mini golf
-                            </label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" value="etc" />
-                            <label className="text-dText/50 font-semibold text-sm">
-                                etc
-                            </label>
-                        </div>
-                    </div>
+                    <Interest selected={interest} onChange={setInterest} />
                 </div>
                 <div className="flex justify-end mt-4">
                     <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50 max-w-[1200px]">
                         <div className="cursor-pointer hover:scale-110 duration-200 ">
-                            <button className="text-dText font-bold" type="submit">
+                            <button
+                                className="text-dText font-bold"
+                                type="submit">
                                 Create Account
                             </button>
                         </div>
