@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
+import kyle from "../assets/testImages/kyle.jpg";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -22,15 +23,36 @@ const Dashboard = () => {
             });
     };
 
+    function navToProfile() {
+        navigate("/profile/userProfile");
+    }
+
     const [profile, setProfile] = useState({});
-    const [friends, setFriends] = useState({});
+    const [friends, setFriends] = useState([]);
     const [friendsFetched, setFriendsFetched] = useState(false);
     const [blindDates, setBlindDates] = useState({});
     const [blindDatesFetched, setBlindDatesFetched] = useState(false);
+    const [futureFriends, setFutureFriends] = useState({});
 
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+        }
+
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/datingapp/profiles", {
+            withCredentials: true
+        })
+        .then((res) => {
+            console.log(res.data);
+            setFutureFriends(res.data);
+        })
+        .catch((err) => {console.log(err);
+        });
+    }, []);
 
     // Dashboard page needs to pull in the profile info of logged in user
     useEffect(() => {
@@ -123,9 +145,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                     <div className="cursor-pointer hover:scale-110 duration-200">
-                        <span className="text-dText font-bold ">
-                            <Link to="/profile/userProfile">Profile</Link>
-                        </span>
+                        <span className="text-dText font-bold" onClick={navToProfile}>Profile</span>
                     </div>
                     <div className="border border-r border-secondary h-4" />
                     <div className="cursor-pointer hover:scale-110 duration-200">
@@ -239,10 +259,8 @@ const Dashboard = () => {
                         <p className="text-secondary mx-8 text-lg font-bold ">
                             Find New Friends
                         </p>
-                        {friends && friends.length > 0 ? (
-                            friends.map((friend, index) => {
-                                const thisFriend = friend.friend[getRandomInt(friend.length)];
-                                return (
+                        {futureFriends && futureFriends.length > 0 ? (
+                            shuffleArray(futureFriends).slice(0, 2).map((futureFriend, index) => (
                                 <div
                                     key={index}
                                     className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
@@ -250,16 +268,16 @@ const Dashboard = () => {
                                         <img
                                             // src={testImg}
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                            src={thisFriend.pictures[0]}
-                                            alt={"profile picture of " + thisFriend.name}
+                                            // src={..}
+                                            alt={"profile picture of " + futureFriend.name}
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
                                     <h3 className="text-dText font-semibold text-sm">
-                                        <Link to={"/friends/" + thisFriend._id}>{thisFriend.name}</Link>
+                                        <Link to={"/friends/" + futureFriend._id}>{futureFriend.name}</Link>
                                     </h3>
                                 </div>
-                            );})) : (
+                            ))) : (
                                 <p>Time to make some friends</p>
                             )}
                         {/* {friends.map((friend, index) => {
@@ -329,7 +347,7 @@ const Dashboard = () => {
                         </p>
 
                         {friends && friends.length > 0 ? (
-                            friends.map((friend, index) => (
+                            shuffleArray(friends).slice(0,2).map((friend, index) => (
                                 <div
                                     key={index}
                                     className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">

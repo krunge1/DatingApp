@@ -68,7 +68,19 @@ const Profile = (props) => {
             });
             setFriendsFetched(true);
         }
-    }, [profile.friend, friendsFetched]);   
+    }, [profile.friend, friendsFetched]);
+
+    const removeBlindDate = (e) => {
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/datingapp/profiles/removeBlindDate/${userProfile._id}/${id}`, {}, { withCredentials: true })
+        .then (res => {
+        console.log(res.data);
+        setFriends((prevFriends) => prevFriends.filter((friend) => friend._id !== id));
+        setIsFriend(false);
+        })
+        .catch((err) => {
+        console.log(err);
+        }, [profile.friend, friendsFetched])};
 
     
 
@@ -193,7 +205,7 @@ const Profile = (props) => {
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
-                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.aboutMe}</Link>
+                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">
