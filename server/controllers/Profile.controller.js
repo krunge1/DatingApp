@@ -163,9 +163,9 @@ module.exports = {
             if (existingFriend) {
                 return res.status(400).json({message: 'Friend already added'});
             }
-            // friendProfile.friend.push(loggedInUserId);
+            friendProfile.friend.push(loggedInUserId);
             profile.friend.push(friendId);
-            // await friendProfile.save()
+            await friendProfile.save()
             await profile.save();
             res.json(profile);
         }catch (err){
