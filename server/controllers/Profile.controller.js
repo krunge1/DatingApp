@@ -148,28 +148,34 @@ module.exports = {
             const loggedInUserId = userData._id;
             // Find the profile by ID and check if the logged-in user owns it
             const profile = await Profile.findById(req.params.id);
-            // const friendProfile = await Profile.findById(req.params.friendId)
-            // console.log(profile._id)
-            if (!profile) {
+            const friendProfile = await Profile.findById(req.params.friendId);
+
+            if (!profile || !friendProfile) {
                 return res.status(400).json({ message: 'Profile not found' });
             }
-            if(profile.user.toString() !== loggedInUserId){
-                return res.status(400).json({message: "User does not own profile."})
+
+            if (profile.user.toString() !== loggedInUserId) {
+                return res.status(400).json({ message: "User does not own profile." });
             }
-            // Check if the friendId already exists in the friends array
-            friendId = req.params.friendId
-            // console.log(friendId)
-            const existingFriend = profile.friend.find((friend) => friend.toString() === friendId);
-            if (existingFriend) {
-                return res.status(400).json({message: 'Friend already added'});
+
+            // Check if the friendId already exists in the friends array for both profiles
+            const existingFriendInProfile = profile.friend.find((friend) => friend.toString() === req.params.friendId);
+            const existingFriendInFriendProfile = friendProfile.friend.find((friend) => friend.toString() === req.params.id);
+
+            if (existingFriendInProfile || existingFriendInFriendProfile) {
+                return res.status(400).json({ message: 'Friend already added' });
             }
-            friendProfile.friend.push(loggedInUserId);
-            profile.friend.push(friendId);
-            await friendProfile.save()
+
+            // Add friendId to both profiles' friend arrays
+            profile.friend.push(req.params.friendId);
+            friendProfile.friend.push(req.params.id);
+
             await profile.save();
+            await friendProfile.save();
+
             res.json(profile);
-        }catch (err){
-            res.status(400).json({error: err})
+        } catch (err) {
+            res.status(400).json({ error: err });
         }
     },
        //Add Blind Date to Profile Model
@@ -183,22 +189,25 @@ module.exports = {
             //Verify Token and get userID
             const userData = await jwt.verify(userToken, secret);
             const loggedInUserId = userData._id;
-            const blindDateProfile = await Profile.findById(req.params.blindDateId);
-            const userProfile = await Profile.findOne({user: loggedInUserId})
             const blindDateId = req.params.blindDateId;
+            const friendReceivingDateId = req.params.friendId;
+            // Find the profile by ID and check if the logged-in user owns it
+            const blindDateProfile = await Profile.findById(blindDateId);
+            const userProfile = await Profile.findOne({user: loggedInUserId})
             console.log(userProfile._id)
             // Find the profile by ID and check if the logged-in user DOES NOT owns it
-            const friendProfile = await Profile.findById(req.params.friendId);
+            const friendProfile = await Profile.findById(friendReceivingDateId);
             if (!friendProfile) {
                 return res.status(400).json({ message: 'Profile not found' });
             }
             //Verify if user is attempting to add blind date to own profile
-            if(friendProfile.user.toString() === loggedInUserId){
+            if(friendProfile.user.toString() === loggedInUserId || blindDateProfile.user.toString() === loggedInUserId){
                 return res.status(400).json({message: "Cannot add own profile to a date."})
             }
             // Check if the blindDateId already exists in the Blind Date array
             const blindDate = friendProfile.blindDate.find((blindDate) => blindDate.toString() === blindDateProfile._id);
-            if(blindDate){
+            const friendBlindDate = blindDateProfile.blindDate.find((friendBlindDate) => friendBlindDate.toString() === friendProfile._id);
+            if(blindDate || friendBlindDate){
                 return res.status(400).json({message: 'Blind Date already added'});
             };
             // Check to see if the User is actually friends with the Friend profile getting blind date add and the Blind Date Profile
@@ -208,7 +217,9 @@ module.exports = {
                 return res.status(400).json({ message: 'You must be friends with both profiles to add a blind date' });
             };
             friendProfile.blindDate.push(blindDateId);
+            blindDateProfile.blindDate.push(friendReceivingDateId)
             await friendProfile.save();
+            await blindDateProfile.save();
             res.json(friendProfile);
         }catch (err){
             res.status(400).json({error: err})
@@ -283,24 +294,29 @@ module.exports = {
             //Verify Token and get userID
             const userData = await jwt.verify(userToken, secret);
             const loggedInUserId = userData._id;
+            const friendId = req.params.friendId
+            const loggedInUserProfileId = req.params.id
             // Find the profile by ID and check if the logged-in user owns it
             const profile = await Profile.findById(req.params.id);
+            const friendProfile = await Profile.findById(req.params.friendId)
             // console.log(profile._id)
-            if (!profile) {
+            if (!profile || !friendProfile) {
                 return res.status(400).json({ message: 'Profile not found' });
             }
             if(profile.user.toString() !== loggedInUserId){
                 return res.status(400).json({message: "User does not own profile."})
             }
             // Check if the friendId already exists in the friends array
-            friendId = req.params.friendId
             const existingFriendIndex = profile.friend.findIndex((friend) => friend.toString() === friendId);
+            const existingUserIndexOnFriendProfile = friendProfile.friend.findIndex((userProfile) => userProfile.toString() === loggedInUserProfileId);
             // console.log(existingFriendIndex)
-            if (existingFriendIndex === -1) {
+            if (existingFriendIndex === -1 || existingUserIndexOnFriendProfile === -1) {
                 return res.status(400).json({message: 'Friend not found'});
             }
             profile.friend.splice(existingFriendIndex, 1);
+            friendProfile.friend.splice(existingUserIndexOnFriendProfile, 1)
             await profile.save();
+            await friendProfile.save();
             res.json(profile);
         }catch (err){
             res.status(400).json({error: err})
@@ -316,8 +332,11 @@ module.exports = {
             //Verify Token and get userID
             const userData = await jwt.verify(userToken, secret);
             const loggedInUserId = userData._id;
+            const blindDateId = req.params.blindDateId;
+            const userProfileId = req.params.id;
             // Find the profile by ID and check if the logged-in user owns it
-            const profile = await Profile.findById(req.params.id);
+            const profile = await Profile.findById(userProfileId);
+            const blindDateProfile = await Profile.findById(blindDateId);
             // console.log(profile._id)
             if (!profile) {
                 return res.status(400).json({ message: 'Profile not found' });
@@ -326,14 +345,16 @@ module.exports = {
                 return res.status(400).json({message: "User does not own profile."})
             }
             // Check if the blindDateId already exists in the Blind Date array
-            blindDateId = req.params.blindDateId
             const existingBlindDateIndex = profile.blindDate.findIndex((blindDate) => blindDate.toString() === blindDateId);
+            const existingUserIndexOnBlindDateProfile = blindDateProfile.blindDate.findIndex((userProfile) => userProfile.toString() === userProfileId);
             // console.log(existingBlindDateIndex)
-            if (existingBlindDateIndex === -1) {
+            if (existingBlindDateIndex === -1 || existingUserIndexOnBlindDateProfile === -1) {
                 return res.status(400).json({message: 'Blind Date not found'});
             }
             profile.blindDate.splice(existingBlindDateIndex, 1);
+            blindDateProfile.blindDate.splice(existingUserIndexOnBlindDateProfile, 1);
             await profile.save();
+            await blindDateProfile.save();
             res.json(profile);
         }catch (err){
             res.status(400).json({error: err})
