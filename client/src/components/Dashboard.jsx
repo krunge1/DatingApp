@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
-import kyle from "../assets/testImages/kyle.jpg";
+import mapImg from "../assets/testImages/busch_stadium.jpg"
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -30,7 +30,7 @@ const Dashboard = () => {
     const [profile, setProfile] = useState({});
     const [friends, setFriends] = useState([]);
     const [friendsFetched, setFriendsFetched] = useState(false);
-    const [blindDates, setBlindDates] = useState({});
+    const [blindDates, setBlindDates] = useState([]);
     const [blindDatesFetched, setBlindDatesFetched] = useState(false);
     const [futureFriends, setFutureFriends] = useState({});
 
@@ -176,7 +176,6 @@ const Dashboard = () => {
                                         className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                         <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                             <img
-                                                // src={testImg}
                                                 // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
                                                 src={date.pictures[0]}
                                                 alt={"profile picture of " + date.name}
@@ -190,68 +189,21 @@ const Dashboard = () => {
                                 ))) : (
                                     <p>No recommendations yet</p>
                                 )}
-                                {/* {blindDates.map((date, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                                <img
-                                                    // src={testImg}
-                                                    // SHOULD REFERENCE THE FIRST PICTURE OF BLINDATE PROFILE
-                                                    src={date.pictures[0]}
-                                                    alt="profile picture of {date.user.name}"
-                                                    className="object-cover rounded-xl w-full"
-                                                />
-                                            </div>
-                                            <h3 className="text-dText font-semibold text-sm">
-                                                {date.user.name}
-                                            </h3>
-                                        </div>
-                                    );
-                                })} */}
-
-                                {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH BLIND DATES TO TEST 'map' ABOVE */}
-                                {/* <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                        <img
-                                            src={testImg}
-                                            alt=""
-                                            className="object-cover rounded-xl w-full"
-                                        />
-                                    </div>
-                                    <h3 className="text-dText font-semibold text-sm">
-                                        Titann
-                                    </h3>
-                                </div>
-                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                        <img
-                                            src={testImg}
-                                            alt=""
-                                            className="object-cover rounded-xl w-full"
-                                        />
-                                    </div>
-                                    <h3 className="text-dText font-semibold text-sm">
-                                        Titann
-                                    </h3>
-                                </div>
-                                <div className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                        <img
-                                            src={testImg}
-                                            alt=""
-                                            className="object-cover rounded-xl w-full"
-                                        />
-                                    </div>
-                                    <h3 className="text-dText font-semibold text-sm">
-                                        Titann
-                                    </h3>
-                                </div> */}
                             </div>
                         </div>
                     </div>
-                    <div className="border border-red-500 w-[500px] h-[500px] mx-2 my-2 justify-self-center py-4"></div>
+                    <div className="border border-red-500 w-[500px] mx-2 my-2 justify-self-center py-4">
+                        <p className="text-secondary mx-8 text-lg font-bold">
+                                Friends Near You
+                        </p>
+                        <div className="bg-gray-200 w-full h-[300px]">
+                                <img
+                                            src={mapImg}
+                                            alt=""
+                                            className="object-cover rounded-xl w-full"
+                                        />
+                                </div>
+                    </div>
                 </div>
 
                 <div className="justify-self-center">
@@ -259,6 +211,7 @@ const Dashboard = () => {
                         <p className="text-secondary mx-8 text-lg font-bold ">
                             Find New Friends
                         </p>
+                        <div className="items-center grid grid-cols-2 mx-auto mt-4">
                         {futureFriends && futureFriends.length > 0 ? (
                             shuffleArray(futureFriends).slice(0, 2).map((futureFriend, index) => (
                                 <div
@@ -266,9 +219,8 @@ const Dashboard = () => {
                                     className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                         <img
-                                            // src={testImg}
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                            // src={..}
+                                            src={futureFriend.pictures[0]}
                                             alt={"profile picture of " + futureFriend.name}
                                             className="object-cover rounded-xl w-full"
                                         />
@@ -280,72 +232,14 @@ const Dashboard = () => {
                             ))) : (
                                 <p>Time to make some friends</p>
                             )}
-                        {/* {friends.map((friend, index) => {
-                            const thisFriend =
-                                friend.friend[getRandomInt(friend.length)];
-                            return (
-                                <div
-                                    key={index}
-                                    className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                                    <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                        <img
-                                            // src={testImg}
-                                            // SHOULD REFERENCE THE FIRST PICTURE OF A RANDOM FRIEND OF A FRIEND PROFILE
-                                            src={thisFriend.pictures[0]}
-                                            alt="profile picture of {thisFriend.user.name}"
-                                            className="object-cover rounded-xl w-full"
-                                        />
-                                    </div>
-                                    <h3 className="text-dText font-semibold text-sm">
-                                        {thisFriend.user.name}
-                                    </h3>
-                                </div>
-                            );
-                        })} */}
-                        {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH FRIENDS OF FRIENDS TO TEST 'map' ABOVE */}
-                        {/* <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
                         </div>
-                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
-                        </div>
-                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
-                        </div> */}
                     </div>
 
                     <div className="border border-red-500 w-[500px]  mx-2 my-2 justify-self-center py-4">
                         <p className="text-secondary mx-8 text-lg font-bold ">
-                            FRIEND LIST
+                            Friend List
                         </p>
-
+                        <div className="items-center grid grid-cols-2 mx-auto mt-4">
                         {friends && friends.length > 0 ? (
                             shuffleArray(friends).slice(0,2).map((friend, index) => (
                                 <div
@@ -353,7 +247,6 @@ const Dashboard = () => {
                                     className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                         <img
-                                            // src={testImg}
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
                                             src={friend.pictures[0]}
                                             alt={"profile picture of " + friend.name}
@@ -367,44 +260,7 @@ const Dashboard = () => {
                             ))) : (
                                 <p>Time to add some friends</p>
                             )}
-
-                        {/* I WILL DELETE THESE OTHER DIVS AS SOON AS THERE ARE ENOUGH FRIENDS TO TEST 'map' ABOVE */}
-                        {/* <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
                         </div>
-                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
-                        </div>
-                        <div className="border border-red-500 w-[480px] h-[180px] mx-2 my-2 justify-self-center flex items-center p-2 gap-2">
-                            <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                            <h3 className="text-dText font-semibold text-sm">
-                                Titann
-                            </h3>
-                        </div> */}
                     </div>
                 </div>
             </div>
