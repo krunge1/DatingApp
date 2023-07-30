@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import mapImg from "../assets/testImages/busch_stadium.jpg"
-import axios from "axios";
+import axios from "axios"
 
 const Friends = (props) => {
     const {id} = useParams();
@@ -51,13 +51,18 @@ const Friends = (props) => {
             })
             .then(res => {
                 setUserProfile(res.data)
-                console.log(userProfile)
-                console.log("userProfile.friend:", userProfile.friend[0])
+                // console.log(userProfile)
+                // console.log("userProfile.friend:", userProfile.friend)
                 // Check if viewed profile ID is in the friend list of the logged-in user
                 if (res.data.friend && res.data.friend.includes(id)) {
                     setIsFriend(true);
                 } else {
                     setIsFriend(false);
+                }
+                if (res.data.blindDate && res.data.blindDate.includes(id)){
+                    setIsBlindDate(true);
+                }else{
+                    setIsBlindDate(false);
                 }
             })
             .catch(err => console.log(err))
@@ -93,8 +98,9 @@ const Friends = (props) => {
         // Check if there are friends in the profile
         if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
             // Randomize the order of friends
-            const shuffledFriends = profile.friend.sort(() => Math.random() - 0.5);
-    
+            const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id && friend._id !== profile._id);
+            const shuffledFriends = friendListExcludingUserProfile.sort(() => Math.random() - 0.5);
+
             // Slice the first two friends from the shuffled array
             const selectedFriends = shuffledFriends.slice(0, 2);
     
@@ -113,12 +119,13 @@ useEffect(() => {
             .get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
-                if (res.data.blindDate && res.data.blindDate.includes(id)) {
-                    setIsBlindDate(true);
-                } else {
-                    setIsBlindDate(false);
+                if (res.data.blindDate && !res.data.blindDate.includes(id)) {
+                    setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
                 }
-                setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+                //     setIsBlindDate(true);
+                // } else {
+                //     setIsBlindDate(false);
+                // }
             })
             .catch((err) => {
                 console.log(err);
@@ -126,20 +133,21 @@ useEffect(() => {
     };
     // Check if there are friends for dates in the user profile
     if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
+        const potentialBlindDateListExcludingFriendProfile = userProfile.friend.filter(friend => friend._id !== profile._id);
         // Randomize the order of friends
-        const shuffledBlindDates = userProfile.friend.sort(() => Math.random() - 0.5);
-
+        const shuffledBlindDates = potentialBlindDateListExcludingFriendProfile.sort(() => Math.random() - 0.5);
+        
         // Slice the first two friends from the shuffled array
         const selectedBlindDates = shuffledBlindDates.slice(0, 2);
-
+        
         // Loop through each friend and fetch their profile
         selectedBlindDates.forEach((blindDateId) => {
             fetchBlindDateProfile(blindDateId);
-        });
+    });
         setBlindDatesFetched(true);
-    }
-}, [userProfile.friend, blindDatesFetched]);
-
+        }
+    }, [userProfile.friend, blindDatesFetched]);
+    
     const addFriend = (e) => {
         e.preventDefault();
         axios.post(`http://localhost:8000/api/datingapp/profiles/addFriend/${userProfile._id}/${id}`, {}, { withCredentials: true })
@@ -164,12 +172,12 @@ useEffect(() => {
         console.log(err);
         }, [profile.friend, friendsFetched])};
 
-    const addBlindDate = (e) => {
+    const addBlindDate = (e, blindDate) => {
         e.preventDefault();
         axios.post(`http://localhost:8000/api/datingapp/profiles/addBlindDate/${blindDate._id}/${id}`, {}, { withCredentials: true })
         .then (res => {
-        console.log(res.data);
-        setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+        console.log(res.data); 
+        setBlindDates((prevBlindDates) => prevBlindDates.filter(item => item._id !== blindDate._id));
         setBlindDates(true);
         })
         .catch((err) => {
@@ -266,6 +274,25 @@ useEffect(() => {
                                 </div>
                             </div>
                             )}
+
+                            {!isBlindDate?(
+                                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                                    <div className="cursor-pointer hover:scale-110 duration-200">
+                                        <span className="text-dText font-bold" onClick={removeBlindDate}>
+                                            Remove Blind Date
+                                        </span>
+                                    </div>
+                                </div>
+                            ):(
+                                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
+                                    <div className="cursor-pointer hover:scale-110 duration-200">
+                                        <span className="text-dText font-bold ">
+                                            
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             </div>
                             <h4 className="font-semibold text-md text-slate-600 my-2">
                                 About Me :
@@ -322,26 +349,19 @@ useEffect(() => {
                                             className="object-cover rounded-xl w-full"
                                         />
                                     </div>
-                                        {isBlindDate?(
-                                            <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                                                <div className="cursor-pointer hover:scale-110 duration-200">
-                                                </div>
-                                            </div>
-                                        ):(
                                             <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                             <div className="cursor-pointer hover:scale-110 duration-200">
-                                                <span className="text-dText font-bold " onClick={addBlindDate}>
+                                                <span className="text-dText font-bold " onClick={(e) => addBlindDate(e, blindDate)}>
                                                     Add Blind Date
                                                 </span>
                                             </div>
                                         </div>
-                                        )}
                                         <Link className="text-dText font-semibold text-sm" to={"/friends/"+blindDate._id}>{blindDate.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">
                                 <div className="rounded-xl flex relative mb-4">
-                                    <p className="text-dText font-semibold text-sm">missing friends</p>
+                                    <p className="text-dText font-semibold text-sm">You've already recommended all your friends!</p>
                                 </div>
                             </div>
                         )}
