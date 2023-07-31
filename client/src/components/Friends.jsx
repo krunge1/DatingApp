@@ -79,7 +79,7 @@ const Friends = (props) => {
             setProfile(res.data);
         })
         .catch(err => console.log(err))
-    },[])
+    },[profile])
 
     // Function to fetch friend's profile by ID
     useEffect(() => {
