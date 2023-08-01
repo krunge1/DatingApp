@@ -51,7 +51,7 @@ const Friends = (props) => {
             })
             .then(res => {
                 setUserProfile(res.data)
-                // console.log(userProfile)
+                console.log(userProfile)
                 // console.log("userProfile.friend:", userProfile.friend)
                 // Check if viewed profile ID is in the friend list of the logged-in user
                 if (res.data.friend && res.data.friend.includes(id)) {
@@ -80,6 +80,18 @@ const Friends = (props) => {
         })
         .catch(err => console.log(err))
     },[])
+
+    // This useEffect updates the profile when the id prop changes
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/datingapp/profiles/${id}`, {
+        withCredentials: true
+        })
+        .then(res => {
+        console.log(res.data);
+        setProfile(res.data);
+        })
+        .catch(err => console.log(err));
+    }, [id]);
 
     // Function to fetch friend's profile by ID
     useEffect(() => {
@@ -122,10 +134,6 @@ useEffect(() => {
                 if (res.data.blindDate && !res.data.blindDate.includes(id)) {
                     setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
                 }
-                //     setIsBlindDate(true);
-                // } else {
-                //     setIsBlindDate(false);
-                // }
             })
             .catch((err) => {
                 console.log(err);
@@ -134,6 +142,7 @@ useEffect(() => {
     // Check if there are friends for dates in the user profile
     if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
         const potentialBlindDateListExcludingFriendProfile = userProfile.friend.filter(friend => friend._id !== profile._id);
+        console.log(potentialBlindDateListExcludingFriendProfile)
         // Randomize the order of friends
         const shuffledBlindDates = potentialBlindDateListExcludingFriendProfile.sort(() => Math.random() - 0.5);
         
@@ -146,7 +155,7 @@ useEffect(() => {
     });
         setBlindDatesFetched(true);
         }
-    }, [userProfile.friend, blindDatesFetched]);
+    }, [userProfile.friend, profile.friend, blindDatesFetched]);
     
     const addFriend = (e) => {
         e.preventDefault();
@@ -190,7 +199,7 @@ useEffect(() => {
         .then (res => {
         console.log(res.data);
         setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
-        setBlindDates(false);
+        setIsBlindDate(false);
         })
         .catch((err) => {
         console.log(err);
@@ -275,7 +284,7 @@ useEffect(() => {
                             </div>
                             )}
 
-                            {!isBlindDate?(
+                            {isBlindDate?(
                                 <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                     <div className="cursor-pointer hover:scale-110 duration-200">
                                         <span className="text-dText font-bold" onClick={removeBlindDate}>
@@ -284,12 +293,7 @@ useEffect(() => {
                                     </div>
                                 </div>
                             ):(
-                                <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                                    <div className="cursor-pointer hover:scale-110 duration-200">
-                                        <span className="text-dText font-bold ">
-                                            
-                                        </span>
-                                    </div>
+                                <div>
                                 </div>
                             )}
 
