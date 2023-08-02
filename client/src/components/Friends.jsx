@@ -95,16 +95,14 @@ const Friends = (props) => {
 
     // Function to fetch friend's profile by ID
     useEffect(() => {
-        const fetchFriendProfile = (friendId) => {
-        axios
-            .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
-            .then((res) => {
+        const fetchFriendProfile = async (friendId) => {
+        try{
+            const res = await axios.get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
             console.log(res.data);
             setFriends((prevFriends) => [...prevFriends, res.data]);
-            })
-            .catch((err) => {
+            }catch(err) {
             console.log(err);
-            });
+            };
         };
     
         // Check if there are friends in the profile
@@ -122,22 +120,20 @@ const Friends = (props) => {
             });
             setFriendsFetched(true);
         }
-    }, [profile.friend, friendsFetched]);   
+    }, [userProfile.friend, profile.friend, friendsFetched]);   
 
 // Function to fetch blind date's profile by ID
 useEffect(() => { 
-    const fetchBlindDateProfile = (blindDateId) => {
-        axios
-            .get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
-            .then((res) => {
+    const fetchBlindDateProfile = async (blindDateId) => {
+        try{
+            const res = await axios.get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
                 console.log(res.data);
                 if (res.data.blindDate && !res.data.blindDate.includes(id)) {
                     setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
                 }
-            })
-            .catch((err) => {
+            }catch(err) {
                 console.log(err);
-            });
+            };
     };
     // Check if there are friends for dates in the user profile
     if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
