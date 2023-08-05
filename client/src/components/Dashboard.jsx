@@ -47,8 +47,10 @@ const Dashboard = () => {
             withCredentials: true
         })
         .then((res) => {
-            console.log(res.data);
-            setFutureFriends(res.data);
+            const profileListExcludingUserProfile = res.data.filter(friend => friend._id !== profile._id);
+            // console.log(profileListExcludingUserProfile);
+            // console.log(res.data);
+            setFutureFriends(profileListExcludingUserProfile);
         })
         .catch((err) => {console.log(err);
         });
