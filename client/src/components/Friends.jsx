@@ -51,7 +51,8 @@ const Friends = (props) => {
             })
             .then(res => {
                 setUserProfile(res.data)
-                console.log(userProfile)
+                console.log(res.data)
+                console.log(id);
                 // console.log("userProfile.friend:", userProfile.friend)
                 // Check if viewed profile ID is in the friend list of the logged-in user
                 if (res.data.friend && res.data.friend.includes(id)) {
@@ -67,7 +68,6 @@ const Friends = (props) => {
             })
             .catch(err => console.log(err))
         },[])
-    
 
     //Get method to pull in the viewing profile information and assign variables
     useEffect(() => {
@@ -77,6 +77,11 @@ const Friends = (props) => {
         .then(res => {
             console.log(res.data);
             setProfile(res.data);
+            setFriends([]);
+            setFriendsFetched(false);
+            console.log(friendsFetched)
+            setBlindDates([]);
+            setBlindDatesFetched(false);
         })
         .catch(err => console.log(err))
     },[])
@@ -89,6 +94,10 @@ const Friends = (props) => {
         .then(res => {
         console.log(res.data);
         setProfile(res.data);
+        setFriends([]);
+        setFriendsFetched(false);
+        setBlindDates([]);
+        setBlindDatesFetched(false);
         })
         .catch(err => console.log(err));
     }, [id]);
@@ -108,7 +117,8 @@ const Friends = (props) => {
         // Check if there are friends in the profile
         if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
             // Randomize the order of friends
-            const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id && friend._id !== profile._id);
+            const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id);
+            console.log(friendListExcludingUserProfile);
             const shuffledFriends = friendListExcludingUserProfile.sort(() => Math.random() - 0.5);
 
             // Slice the first two friends from the shuffled array
@@ -120,7 +130,7 @@ const Friends = (props) => {
             });
             setFriendsFetched(true);
         }
-    }, [userProfile.friend, profile.friend, friendsFetched]);   
+    }, [profile.friend, friendsFetched]);   
 
 // Function to fetch blind date's profile by ID
 useEffect(() => { 
@@ -136,6 +146,8 @@ useEffect(() => {
             };
     };
     // Check if there are friends for dates in the user profile
+    console.log(userProfile.friend);
+    console.log(blindDatesFetched)
     if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
         const potentialBlindDateListExcludingFriendProfile = userProfile.friend.filter(friend => friend._id !== profile._id);
         console.log(potentialBlindDateListExcludingFriendProfile)
@@ -182,8 +194,8 @@ useEffect(() => {
         axios.post(`http://localhost:8000/api/datingapp/profiles/addBlindDate/${blindDate._id}/${id}`, {}, { withCredentials: true })
         .then (res => {
         console.log(res.data); 
-        setBlindDates((prevBlindDates) => prevBlindDates.filter(item => item._id !== blindDate._id));
-        setBlindDates(true);
+        setBlindDates([])
+        setBlindDatesFetched(false);
         })
         .catch((err) => {
         console.log(err);
@@ -194,7 +206,7 @@ useEffect(() => {
         axios.post(`http://localhost:8000/api/datingapp/profiles/removeBlindDate/${userProfile._id}/${id}`, {}, { withCredentials: true })
         .then (res => {
         console.log(res.data);
-        setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
+        setBlindDates([]);
         setIsBlindDate(false);
         })
         .catch((err) => {
