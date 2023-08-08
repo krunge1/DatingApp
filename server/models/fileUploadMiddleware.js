@@ -10,16 +10,18 @@ uploadMiddleware.array("pictures", 100)(req, res, (err) => {
     } else if (err) {
     return res.status(500).json({ message: "Something went wrong", error: err });
     }
-
+    console.log(req.uploadedFiles)
     // Modify file paths and store them in req.uploadedFiles array
     req.uploadedFiles = req.files.map((file) => {
     if (file.mimetype.split("/")[0] === "image") {
         const { path, originalname } = file;
+        console.log(path + " " + originalname);
         const parts = originalname.split(".");
         const extension = parts[parts.length - 1];
         const newPath = `${path}.${extension}`;
+        console.log(path+' ' +newPath);
         fs.renameSync(path, newPath);
-        return newPath.replace("/uploads/g","");
+        return newPath.replace("uploads/","");
     } else {
         return null;
     }

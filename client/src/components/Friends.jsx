@@ -68,6 +68,22 @@ const Friends = (props) => {
             })
             .catch(err => console.log(err))
         },[])
+        
+        // This useEffect updates the profile when the id prop changes
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/datingapp/profiles/${id}`, {
+        withCredentials: true
+        })
+        .then(res => {
+        console.log(res.data);
+        setProfile(res.data);
+        setFriends([]);
+        setFriendsFetched(false);
+        setBlindDates([]);
+        setBlindDatesFetched(false);
+    })
+    .catch(err => console.log(err));
+}, [id]);
 
     //Get method to pull in the viewing profile information and assign variables
     useEffect(() => {
@@ -86,38 +102,24 @@ const Friends = (props) => {
         .catch(err => console.log(err))
     },[])
 
-    // This useEffect updates the profile when the id prop changes
-    useEffect(() => {
-        axios.get(`http://localhost:8000/api/datingapp/profiles/${id}`, {
-        withCredentials: true
-        })
-        .then(res => {
-        console.log(res.data);
-        setProfile(res.data);
-        setFriends([]);
-        setFriendsFetched(false);
-        setBlindDates([]);
-        setBlindDatesFetched(false);
-        })
-        .catch(err => console.log(err));
-    }, [id]);
-
-    // Function to fetch friend's profile by ID
-    useEffect(() => {
-        const fetchFriendProfile = async (friendId) => {
-        try{
-            const res = await axios.get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
+// Function to fetch friend's profile by ID
+useEffect(() => {
+    const fetchFriendProfile = (friendId) => {
+        axios
+        .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
+        .then((res) => {
             console.log(res.data);
             setFriends((prevFriends) => [...prevFriends, res.data]);
-            }catch(err) {
+        })
+        .catch((err) => {
             console.log(err);
-            };
-        };
+        });
+    };
     
-        // Check if there are friends in the profile
-        if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
-            // Randomize the order of friends
-            const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id);
+    // Check if there are friends in the profile
+    if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
+        // Randomize the order of friends
+        const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id);
             console.log(friendListExcludingUserProfile);
             const shuffledFriends = friendListExcludingUserProfile.sort(() => Math.random() - 0.5);
 
@@ -134,16 +136,16 @@ const Friends = (props) => {
 
 // Function to fetch blind date's profile by ID
 useEffect(() => { 
-    const fetchBlindDateProfile = async (blindDateId) => {
-        try{
-            const res = await axios.get(`http://localhost:8000/api/datingapp/profiles/${blindDateId}`, { withCredentials: true })
+        const fetchBlindDateProfile = (dateId) => {
+            axios
+                .get(`http://localhost:8000/api/datingapp/profiles/${dateId}`, { withCredentials: true })
+                .then((res) => {
                 console.log(res.data);
-                if (res.data.blindDate && !res.data.blindDate.includes(id)) {
-                    setBlindDates((prevBlindDates) => [...prevBlindDates, res.data]);
-                }
-            }catch(err) {
+                setBlindDates((prevDates) => [...prevDates, res.data]);
+                })
+                .catch((err) => {
                 console.log(err);
-            };
+                });
     };
     // Check if there are friends for dates in the user profile
     console.log(userProfile.friend);
@@ -248,7 +250,9 @@ useEffect(() => {
                             <div>
                                 <img
                                     className="aspect-square object-cover rounded-l-2xl"
-                                    src={testImg}
+                                    // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                    src={profile.pictures[0]}
+                                    alt={"profile picture of " + profile.name}
                                 />
                             </div>
                             <div className="grid">
