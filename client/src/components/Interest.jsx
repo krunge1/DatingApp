@@ -18,7 +18,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("sport")}
+                        checked={selected.includes("sport")}
                         name="sport"
                         type="checkbox"
                         value="sport"
@@ -30,7 +30,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("reading")}
+                        checked={selected.includes("reading")}
                         name="reading"
                         type="checkbox"
                         value="reading"
@@ -42,7 +42,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("hiking")}
+                        checked={selected.includes("hiking")}
                         name="hiking"
                         type="checkbox"
                         value="hiking"
@@ -54,7 +54,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("coding")}
+                        checked={selected.includes("coding")}
                         name="coding"
                         type="checkbox"
                         value="coding"
@@ -66,7 +66,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("miniGolf")}
+                        checked={selected.includes("miniGolf")}
                         name="miniGolf"
                         type="checkbox"
                         value="miniGolf"
@@ -78,7 +78,7 @@ function Interest({ selected, onChange }) {
                 <div className="flex items-center gap-2">
                     <input
                         onChange={checkBoxHandler}
-                        cheched={selected.includes("etc")}
+                        checked={selected.includes("etc")}
                         name="etc"
                         type="checkbox"
                         value="etc"

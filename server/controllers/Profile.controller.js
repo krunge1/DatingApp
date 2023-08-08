@@ -225,8 +225,8 @@ module.exports = {
             res.status(400).json({error: err})
         }
     },
-    // "photos" need to match with data.set("photos", files); in uploadPhoto() in MyTrail.jsx
-    // 100 is the limit (can be any other number)
+
+    //Add photo(s) to profile
     uploadPhoto: async (req, res) => {
         try{
             const {userToken} = req.cookies;

@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const navigate = useNavigate();
+
     const logout = () => {
         axios
             .post(
@@ -33,29 +34,15 @@ const Dashboard = () => {
     const [blindDates, setBlindDates] = useState([]);
     const [blindDatesFetched, setBlindDatesFetched] = useState(false);
     const [futureFriends, setFutureFriends] = useState({});
-
+    
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
-        }
-
-    useEffect(() => {
-        axios.get("http://localhost:8000/api/datingapp/profiles", {
-            withCredentials: true
-        })
-        .then((res) => {
-            const profileListExcludingUserProfile = res.data.filter(friend => friend._id !== profile._id);
-            // console.log(profileListExcludingUserProfile);
-            // console.log(res.data);
-            setFutureFriends(profileListExcludingUserProfile);
-        })
-        .catch((err) => {console.log(err);
-        });
-    }, []);
-
+    }
+    
     // Dashboard page needs to pull in the profile info of logged in user
     useEffect(() => {
         axios.get("http://localhost:8000/api/datingapp/userProfile", {
@@ -75,6 +62,22 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
+        axios.get("http://localhost:8000/api/datingapp/profiles", {
+            withCredentials: true
+        })
+        .then((res) => {
+            // console.log(profile);
+            const profileListExcludingUserProfile = res.data.filter(friend => friend._id !== profile._id);
+            // console.log(profileListExcludingUserProfile);
+            // console.log(res.data);
+            setFutureFriends(profileListExcludingUserProfile);
+        })
+        .catch((err) => {console.log(err);
+        });
+    }, [profile]);
+
+
+    useEffect(() => {
         // Function to fetch friend's profile by ID
         const fetchFriendProfile = (friendId) => {
         axios
@@ -87,7 +90,7 @@ const Dashboard = () => {
             console.log(err);
             });
         };
-    
+        console.log(friendsFetched)
         // Check if there are friends in the profile
         if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
             // Randomize the order of friends
