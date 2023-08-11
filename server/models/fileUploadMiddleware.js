@@ -3,7 +3,8 @@ const fs = require("fs");
 
 const uploadMiddleware = multer({ dest: "uploads" });
 
-const fileUpload = (req, res, next) => {
+const fileUpload = (req, res) => {
+    const uploadedFiles = [];
 uploadMiddleware.array("pictures", 100)(req, res, (err) => {
     if (err instanceof multer.MulterError) {
     return res.status(400).json({ message: "File upload error" });
@@ -21,7 +22,7 @@ uploadMiddleware.array("pictures", 100)(req, res, (err) => {
         const newPath = `${path}.${extension}`;
         console.log(path+' ' +newPath);
         fs.renameSync(path, newPath);
-        return newPath.replace("uploads/","");
+        uploadedFiles.push(newPath.replace("uploads/",""));
     } else {
         return null;
     }
@@ -29,8 +30,8 @@ uploadMiddleware.array("pictures", 100)(req, res, (err) => {
 
     // Remove any null values from the array (non-image files)
     req.uploadedFiles = req.uploadedFiles.filter((file) => file !== null);
+    res.json(uploadedFiles);
 
-    next();
 });
 };
 
