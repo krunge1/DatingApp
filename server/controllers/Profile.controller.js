@@ -234,22 +234,9 @@ module.exports = {
             if(!userToken){
                 return res.status(400).json({message: "User must be logged in"});
             }
-            //Verify Token and get userID
-            const userData = await jwt.verify(userToken, secret);
-            const loggedInUserId = userData._id;
-            // Find the profile by ID and check if the logged-in user owns it
-            const profile = await Profile.findById(req.params.id);
-            if (!profile) {
-                return res.status(400).json({ message: 'Profile not found' });
-            }
-            if(profile.user.toString() !== loggedInUserId){
-                return res.status(400).json({message: "User does not own profile."})
-            }
-            //if user owns, make update
+
             const uploadedFiles = req.uploadedFiles;
-            profile.pictures.push(...uploadedFiles);
-            await profile.save();
-            res.json(profile);
+            res.json(uploadedFiles);
         }catch (err){
             res.status(400).json({error: err})
         }

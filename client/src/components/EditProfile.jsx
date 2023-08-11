@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import IconChatHeart from "../assets/icons/HeartIcon";
 import testImg from "../assets/testImages/titann.jpg";
 import Interest from "./Interest";
+import UploadPicture from "./UploadPictures"
 
 const EditProfile = () => {
     const {id} = useParams();
@@ -376,16 +377,9 @@ const EditProfile = () => {
                     </div>
                 </div>
                 <div className="max-w-[920px] flex flex-col m-auto">
-                    <div className="flex items-center gap-2 ">
-                        <input className="text-dText" type="text" name="name" />
-                        <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                            <div className="cursor-pointer hover:scale-110 duration-200">
-                                <span className="text-dText font-bold">
-                                    Upload
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    <UploadPicture
+                        pictures={pictures}
+                        onChange={setPictures}/>
                 </div>
                 <div className="  justify-around m-auto items-center gap-4 my-2 max-w-[780px]">
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">

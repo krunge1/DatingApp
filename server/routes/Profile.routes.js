@@ -7,7 +7,7 @@ module.exports = app => {
     app.get('/api/datingapp/userProfile', ProfileController.findProfileByUserId);
     app.post('/api/datingapp/profiles/create', ProfileController.createProfile);
     app.post('/api/datingapp/profiles/update/:id', ProfileController.updateProfile);
-    app.post('/api/datingapp/profiles/uploadPhoto/:id', fileUploadMiddleware, ProfileController.uploadPhoto);
+    app.post('/api/datingapp/profiles/uploadPhoto', fileUploadMiddleware, ProfileController.uploadPhoto);
     app.post('/api/datingapp/profiles/removePhoto/:id/uploads\:filename', ProfileController.removePhoto)
     app.post('/api/datingapp/profiles/addFriend/:id/:friendId', ProfileController.addFriend);
     app.post('/api/datingapp/profiles/removeFriend/:id/:friendId', ProfileController.removeFriend);
