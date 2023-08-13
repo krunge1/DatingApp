@@ -38,15 +38,6 @@ export default function PhotoUploader({ pictures, onChange }) {
             e.preventDefault();
             onChange([...pictures.filter((eachPhoto) => eachPhoto !== filename)]);
         }
-    
-        function setMainPicture(e, filename) {
-            e.preventDefault();
-    
-            onChange([
-                filename,
-                ...pictures.filter((eachPhoto) => eachPhoto !== filename),
-            ]);
-        }
 
         return(
             <div>
@@ -56,28 +47,15 @@ export default function PhotoUploader({ pictures, onChange }) {
                         <div key={link} className="h-32 flex relative">
                             <img
                                 className="rounded-2xl w-full object-cover"
-                                src={`http://localhost:8000/uploads/${link}`}
+                                src={`http://localhost:8000/${link}`}
                                 alt=""
                             />
                             <button
-                                onClick={(e) => removePhoto(e, link)}
+                                onClick={(e) => removePicture(e, link)}
                                 className="cursor-pointer absolute bottom-2 right-2 text-slate-300 text-lg font-bold bg-slate-300 bg-opacity-20 rounded">
                                 <DeleteIcon
                                     className={`text-slate-200/50 hover:text-slate-200 ${btnEffect}`}
                                 />
-                            </button>
-                            <button
-                                onClick={(e) => setMainPhoto(e, link)}
-                                className="cursor-pointer absolute top-2 right-2 text-slate-300 text-lg font-bold bg-slate-300 bg-opacity-20 rounded">
-                                {link === pictures[0] ? (
-                                    <StarIconFilled
-                                        className={`text-slate-200/50 hover:text-slate-200 ${btnEffect}`}
-                                    />
-                                ) : (
-                                    <StarIconEmpty
-                                        className={`text-slate-200/50 hover:text-slate-200 ${btnEffect}`}
-                                    />
-                                )}
                             </button>
                         </div>
                     ))}

@@ -162,7 +162,7 @@ useEffect(() => {
         // Loop through each friend and fetch their profile
         selectedBlindDates.forEach((blindDateId) => {
             fetchBlindDateProfile(blindDateId);
-    });
+            });
         setBlindDatesFetched(true);
         }
     }, [userProfile.friend, profile.friend, blindDatesFetched]);
@@ -246,27 +246,37 @@ useEffect(() => {
             <div className="max-w-[1080px] m-auto">
                 <div className="top-section">
                     <div className="top-top lg:grid lg:grid-cols-2 gap-8">
-                        <div className="top-top-left gap-2 grid grid-cols-[2fr_1fr] md:max-w-[480px] mb-8">
+                    <div className="top-top-left gap-2 grid grid-cols-[2fr_1fr] md:max-w-[480px] mb-8">
+                            {profile.pictures && profile.pictures.length>0 &&(
                             <div>
                                 <img
                                     className="aspect-square object-cover rounded-l-2xl"
                                     // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                    src={profile.pictures[0]}
+                                    src={`http://localhost:8000/${profile.pictures[0]}`}
                                     alt={"profile picture of " + profile.name}
                                 />
                             </div>
+                            )}
                             <div className="grid">
                                 <div className="overflow-hidden rounded-tr-2xl">
+                                    {profile.pictures && profile.pictures?.[1] &&(
                                     <img
                                         className="aspect-square object-cover relative bottom-1"
-                                        src={testImg}
+                                    // SHOULD REFERENCE THE 2nd PICTURE OF FRIEND PROFILE
+                                    src={`http://localhost:8000/${profile.pictures[1]}`}
+                                    alt={"profile picture of " + profile.name}
                                     />
+                                    )}
                                 </div>
                                 <div className="overflow-hidden rounded-br-2xl">
-                                    <img
-                                        className="aspect-square object-cover relative top-1"
-                                        src={testImg}
-                                    />
+                                    {profile.pictures && profile.pictures?.[2] &&(
+                                        <img
+                                            className="aspect-square object-cover relative top-1"
+                                        // SHOULD REFERENCE THE 3rd PICTURE OF FRIEND PROFILE
+                                        src={`http://localhost:8000/${profile.pictures[2]}`}
+                                            alt={"profile picture of " + profile.name}
+                                        />
+                                        )}
                                 </div>
                             </div>
                         </div>
@@ -358,13 +368,17 @@ useEffect(() => {
                         {blindDates && blindDates.length > 0 ? (
                                 blindDates.map((blindDate, index) => (
                                 <div className="flex items-center gap-16" key={index}>
+
+                                    {blindDate.pictures && blindDate.pictures.length>0 &&(
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
                                         <img
-                                            src={testImg}
-                                            alt=""
                                             className="object-cover rounded-xl w-full"
+                                            // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                            src={`http://localhost:8000/${blindDate.pictures[0]}`}
+                                            alt={"profile picture of " + blindDate.name}
                                         />
                                     </div>
+                                    )}
                                             <div className="flex items-center gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
                                             <div className="cursor-pointer hover:scale-110 duration-200">
                                                 <span className="text-dText font-bold " onClick={(e) => addBlindDate(e, blindDate)}>
@@ -390,14 +404,17 @@ useEffect(() => {
                         {friends && friends.length > 0 ? (
                                 friends.map((friend, index) => (
                                 <div className="flex items-center gap-16" key={index}>
+                                    {friend.pictures && friend.pictures.length>0 &&(
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
                                         <img
-                                            src={testImg}
-                                            alt=""
                                             className="object-cover rounded-xl w-full"
+                                            // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                            src={`http://localhost:8000/${friend.pictures[0]}`}
+                                            alt={"profile picture of " + friend.name}
                                         />
                                     </div>
-                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
+                                    )}
+                                    <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">
