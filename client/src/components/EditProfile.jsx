@@ -10,6 +10,7 @@ const EditProfile = () => {
     const {id} = useParams();
     const navigate = useNavigate();
 
+    const [name, setName] = useState("");
     const [aboutMe, setAboutMe] = useState("");
     const [gender, setGender] = useState("");
     const [sexualOrientation, setSexualOrientation] = useState("");
@@ -59,6 +60,7 @@ const EditProfile = () => {
             withCredentials: true
         })
         .then(res => {
+            setName(res.data.name)
             setAboutMe(res.data.aboutMe)
             setGender(res.data.gender)
             setSexualOrientation(res.data.sexualOrientation)
@@ -76,6 +78,7 @@ const EditProfile = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:8000/api/datingapp/profiles/update/'+id, {
+            name,
             aboutMe,
             gender,
             sexualOrientation,
@@ -92,6 +95,7 @@ const EditProfile = () => {
             navigate("/profile/userProfile")
             })
         .catch(err => console.log(err));
+        setName("");
         setAboutMe("");
         setGender("");
         setSexualOrientation("");
@@ -101,6 +105,17 @@ const EditProfile = () => {
         setZipCode("");
         setPictures([]);
         setInterests([]);
+    }
+
+    const handleName = (e) => {
+        setName(e.target.value);
+        if(e.target.value === ""){
+            setErrors("Name must be 3 characters or longer")
+        }else if(e.target.value.length < 3){
+            setErrors("Name must be 3 characters or longer")
+        }else{
+            setErrors("");
+        }
     }
 
     const handleAboutMe = (e) => {
@@ -160,6 +175,21 @@ const EditProfile = () => {
             </div>
             <form className=" justify-self-center w-[90%] m-auto " onSubmit={handleSubmit}>
                 {/* Gray background Will be removed */}
+                <div className="justify-self-center m-auto flex items-center gap-2 my-2 max-w-[920px]">
+                        <label
+                            className="text-dText/50 font-semibold text-md"
+                            htmlFor="email">
+                            Profile&nbsp;Name
+                        </label>
+                        <input
+                            className="text-dText"
+                            type="text"
+                            name="name"
+                            onChange={handleName}
+                            value={name}
+                        />
+                </div>
+
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
@@ -336,46 +366,6 @@ const EditProfile = () => {
                         </div>
                     </div>
                 </div>
-                <div className="PHOTO">
-                    <div className="items-center grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto mt-4">
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div className="max-w-[920px] flex flex-col m-auto">
                     <UploadPicture
                         pictures={pictures}
@@ -397,9 +387,9 @@ const EditProfile = () => {
             </form>
             <div className="flex justify-end mt-4 mx-[5%]">
                 <div className="flex justify-center gap-4 border px-4 py-2 rounded-2xl bg-red-700 max-w-[1200px]">
-                    <div className="cursor-pointer hover:scale-110 duration-200 ">
+                    <div className="cursor-pointer hover:scale-110 duration-200">
                         <span className="text-slate-200 font-bold">
-                            <button onClick={(e) => {deleteProfile(id)}}>
+                            <button className="bg-red-700" onClick={(e) => {deleteProfile(id)}}>
                                 Delete Account
                             </button>
                         </span>

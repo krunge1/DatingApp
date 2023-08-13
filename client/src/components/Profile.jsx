@@ -110,7 +110,7 @@ const Profile = (props) => {
                                 <img
                                     className="aspect-square object-cover rounded-l-2xl"
                                     // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                    src={`http://localhost:8000/uploads/${profile.pictures[0]}`}
+                                    src={`http://localhost:8000/${profile.pictures[0]}`}
                                     alt={"profile picture of " + profile.name}
                                 />
                             </div>
@@ -196,14 +196,17 @@ const Profile = (props) => {
                         {friends && friends.length > 0 ? (
                                 friends.map((friend, index) => (
                                 <div className="flex items-center gap-16" key={index}>
+                                    {friend.pictures && friend.pictures.length>0 &&(
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
                                         <img
-                                            src={testImg}
-                                            alt=""
                                             className="object-cover rounded-xl w-full"
+                                            // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
+                                            src={`http://localhost:8000/${friend.pictures[0]}`}
+                                            alt={"profile picture of " + friend.name}
                                         />
                                     </div>
-                                        <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
+                                    )}
+                                    <Link className="text-dText font-semibold text-sm" to={"/friends/"+friend._id}>{friend.name}</Link>
                                 </div>
                                 ))) : (
                             <div className="flex items-center gap-16">

@@ -4,10 +4,13 @@ import testImg from "../assets/testImages/titann.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Interest from "./Interest";
+import UploadPicture from "./UploadPictures"
+
 
 const CreateProfile = (props) => {
     const navigate = useNavigate();
 
+    const [name, setName] = useState("");
     const [aboutMe, setAboutMe] = useState("");
     const [gender, setGender] = useState("");
     const [sexualOrientation, setSexualOrientation] = useState("");
@@ -15,6 +18,7 @@ const CreateProfile = (props) => {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zipCode, setZipCode] = useState("");
+    const [pictures, setPictures] = useState([]);
     const [interests, setInterests] = useState([]);
 
     const [errors, setErrors] = useState({});
@@ -36,13 +40,13 @@ const CreateProfile = (props) => {
     };
 
     const handleSubmit = (e) => {
-        console.log("is this working?");
         e.preventDefault();
 
         axios
             .post(
                 "http://localhost:8000/api/datingapp/profiles/create",
                 {
+                    name,
                     aboutMe,
                     gender,
                     sexualOrientation,
@@ -50,7 +54,7 @@ const CreateProfile = (props) => {
                     city,
                     state,
                     zipCode,
-                    // pictures,
+                    pictures,
                     interests
                 },
                 {withCredentials: true})
@@ -99,6 +103,19 @@ const CreateProfile = (props) => {
                 onSubmit={handleSubmit}
                 className=" justify-self-center w-[90%] m-auto ">
                 {/* Gray background Will be removed */}
+                <div className="justify-self-center m-auto flex items-center gap-2 my-2 max-w-[920px]">
+                        <label
+                            className="text-dText/50 font-semibold text-md"
+                            htmlFor="email">
+                            Profile&nbsp;Name
+                        </label>                        <input
+                            className="text-dText"
+                            type="text"
+                            name="name"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                        />
+                </div>
                 <div className=" h-[200px] justify-self-center m-auto flex items-center gap-4 my-2 max-w-[920px]">
                     <label
                         className="text-dText/50 font-semibold text-md"
@@ -285,54 +302,10 @@ const CreateProfile = (props) => {
                         )}
                     </div>
                 </div>
-                <div className="PHOTO">
-                    <div className="items-center grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto mt-4">
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-[200px] h-[150px] mx-2 my-2 justify-self-center flex flex-col items-center">
-                            <div className="bg-gray-200 w-[200px] h-[150px] rounded-xl flex relative">
-                                <img
-                                    src={testImg}
-                                    alt=""
-                                    className="object-cover rounded-xl w-full"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="max-w-[150px] flex flex-col m-auto mt-4">
-                    {/* <div className="flex items-center gap-2 "> */}
-                    {/* <input className="text-dText" type="text" name="name" /> */}
-                    <input type="file" multiple className="hidden" />
-                    <div className="flex justify-center hover:scale-110 duration-200 cursor-pointer gap-4 border px-4 py-2 rounded-2xl bg-primary/50">
-                        <span className="text-dText font-bold ">Browse</span>
-                        {/* </div> */}
-                    </div>
+                <div className="max-w-[920px] flex flex-col m-auto">
+                    <UploadPicture
+                        pictures={pictures}
+                        onChange={setPictures}/>
                 </div>
                 <div className="  justify-around m-auto items-center gap-4 my-2 max-w-[780px]">
                     <h3 className="text-dText/50 font-semibold text-md mr-4 mt-4 mb-2">

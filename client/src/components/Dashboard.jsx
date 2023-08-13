@@ -127,7 +127,7 @@ const Dashboard = () => {
             const shuffledBlindDates = profile.blindDate.sort(() => Math.random() - 0.5);
     
             // Slice the first two dates(lol) from the shuffled array
-            const selectedBlindDates = shuffledBlindDates.slice(0, 2);
+            const selectedBlindDates = shuffledBlindDates
     
             // Loop through each date and fetch their profile
             selectedBlindDates.forEach((dateId) => {
@@ -178,11 +178,11 @@ const Dashboard = () => {
                                     blindDates.map((date, index) => (
                                     <div
                                         key={index}
-                                        className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                        className="border border-red-500 w-[200px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                         <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                             <img
                                                 // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                                src={date.pictures[0]}
+                                                src={`http://localhost:8000/${date.pictures[0]}`}
                                                 alt={"profile picture of " + date.name}
                                                 className="object-cover rounded-xl w-full"
                                             />
@@ -192,7 +192,7 @@ const Dashboard = () => {
                                         </h3>
                                     </div>
                                 ))) : (
-                                    <p>No recommendations yet</p>
+                                    <p className="text-dText mx-8">No recommendations yet</p>
                                 )}
                             </div>
                         </div>
@@ -221,11 +221,11 @@ const Dashboard = () => {
                             shuffleArray(futureFriends).slice(0, 2).map((futureFriend, index) => (
                                 <div
                                     key={index}
-                                    className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    className="border border-red-500 w-[200px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                         <img
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                            src={futureFriend.pictures[0]}
+                                            src={`http://localhost:8000/${futureFriend.pictures[0]}`}
                                             alt={"profile picture of " + futureFriend.name}
                                             className="object-cover rounded-xl w-full"
                                         />
@@ -235,7 +235,7 @@ const Dashboard = () => {
                                     </h3>
                                 </div>
                             ))) : (
-                                <p>Time to make some friends</p>
+                                <p className="text-dText mx-8">Time to make some friends</p>
                             )}
                         </div>
                     </div>
@@ -249,11 +249,11 @@ const Dashboard = () => {
                             shuffleArray(friends).slice(0,2).map((friend, index) => (
                                 <div
                                     key={index}
-                                    className="border border-red-500 w-[180px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
+                                    className="border border-red-500 w-[200px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative">
                                         <img
                                             // SHOULD REFERENCE THE FIRST PICTURE OF FRIEND PROFILE
-                                            src={friend.pictures[0]}
+                                            src={`http://localhost:8000/${friend.pictures[0]}`}
                                             alt={"profile picture of " + friend.name}
                                             className="object-cover rounded-xl w-full"
                                         />
@@ -263,7 +263,7 @@ const Dashboard = () => {
                                     </h3>
                                 </div>
                             ))) : (
-                                <p>Time to add some friends</p>
+                                <p className="text-dText mx-8">Time to add some friends</p>
                             )}
                         </div>
                     </div>
