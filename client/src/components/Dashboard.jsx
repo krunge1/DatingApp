@@ -175,7 +175,7 @@ const Dashboard = () => {
                                 {/* BUT *THIS HEIGHT IS TO LIMITED THE HEIGHT OF PICTURE */}
                                 {/* THESE 6 DIVs SHOULD BE REDUCE TO ONLY 1 AND USE 'map' TO ITERATE  */}
                                 {blindDates && blindDates.length > 0 ? (
-                                    blindDates.map((date, index) => (
+                                    shuffleArray(blindDates).slice(0, 2).map((date, index) => (
                                     <div
                                         key={index}
                                         className="border border-red-500 w-[200px] h-[180px] mx-2 my-2 justify-self-center flex flex-col items-center">

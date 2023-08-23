@@ -12,9 +12,9 @@ const Friends = (props) => {
     const [userProfile, setUserProfile] = useState({});
     const [profile, setProfile] = useState({});
     const [friends, setFriends] = useState([]);
-    const [friendsFetched, setFriendsFetched] = useState(false);
+    const [friendsFetched, setFriendsFetched] = useState();
     const [blindDates, setBlindDates] = useState([]);
-    const [blindDatesFetched, setBlindDatesFetched] = useState(false);
+    const [blindDatesFetched, setBlindDatesFetched] = useState();
     const [isFriend, setIsFriend] = useState(false);
     const [isBlindDate, setIsBlindDate] = useState(false);
 
@@ -51,8 +51,8 @@ const Friends = (props) => {
             })
             .then(res => {
                 setUserProfile(res.data)
-                console.log(res.data)
-                console.log(id);
+                // console.log(res.data)
+                // console.log(id);
                 // console.log("userProfile.friend:", userProfile.friend)
                 // Check if viewed profile ID is in the friend list of the logged-in user
                 if (res.data.friend && res.data.friend.includes(id)) {
@@ -75,7 +75,7 @@ const Friends = (props) => {
         withCredentials: true
         })
         .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         setProfile(res.data);
         setFriends([]);
         setFriendsFetched(false);
@@ -86,86 +86,86 @@ const Friends = (props) => {
 }, [id]);
 
     //Get method to pull in the viewing profile information and assign variables
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/datingapp/profiles/'+id, {
-            withCredentials: true
-        })
-        .then(res => {
-            console.log(res.data);
-            setProfile(res.data);
-            setFriends([]);
-            setFriendsFetched(false);
-            console.log(friendsFetched)
-            setBlindDates([]);
-            setBlindDatesFetched(false);
-        })
-        .catch(err => console.log(err))
-    },[])
+    // useEffect(() => {
+    //     axios.get('http://localhost:8000/api/datingapp/profiles/'+id, {
+    //         withCredentials: true
+    //     })
+    //     .then(res => {
+    //         console.log(res.data);
+    //         setProfile(res.data);
+    //         setFriends([]);
+    //         setFriendsFetched(false);
+    //         console.log(friendsFetched)
+    //         setBlindDates([]);
+    //         setBlindDatesFetched(false);
+    //     })
+    //     .catch(err => console.log(err))
+    // },[])
 
 // Function to fetch friend's profile by ID
-useEffect(() => {
-    const fetchFriendProfile = (friendId) => {
-        axios
-        .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
-        .then((res) => {
-            console.log(res.data);
-            setFriends((prevFriends) => [...prevFriends, res.data]);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
-    
-    // Check if there are friends in the profile
-    if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
-        // Randomize the order of friends
-        const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id);
-            console.log(friendListExcludingUserProfile);
-            const shuffledFriends = friendListExcludingUserProfile.sort(() => Math.random() - 0.5);
-
-            // Slice the first two friends from the shuffled array
-            const selectedFriends = shuffledFriends.slice(0, 2);
-    
-            // Loop through each friend and fetch their profile
-            selectedFriends.forEach((friendId) => {
-            fetchFriendProfile(friendId);
-            });
-            setFriendsFetched(true);
-        }
-    }, [profile.friend, friendsFetched]);   
-
-// Function to fetch blind date's profile by ID
-useEffect(() => { 
-        const fetchBlindDateProfile = (dateId) => {
+    useEffect(() => {
+        const fetchFriendProfile = (friendId) => {
             axios
-                .get(`http://localhost:8000/api/datingapp/profiles/${dateId}`, { withCredentials: true })
-                .then((res) => {
+            .get(`http://localhost:8000/api/datingapp/profiles/${friendId}`, { withCredentials: true })
+            .then((res) => {
                 console.log(res.data);
-                setBlindDates((prevDates) => [...prevDates, res.data]);
-                })
-                .catch((err) => {
+                setFriends((prevFriends) => [...prevFriends, res.data]);
+            })
+            .catch((err) => {
                 console.log(err);
-                });
-    };
-    // Check if there are friends for dates in the user profile
-    console.log(userProfile.friend);
-    console.log(blindDatesFetched)
-    if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
-        const potentialBlindDateListExcludingFriendProfile = userProfile.friend.filter(friend => friend._id !== profile._id);
-        console.log(potentialBlindDateListExcludingFriendProfile)
-        // Randomize the order of friends
-        const shuffledBlindDates = potentialBlindDateListExcludingFriendProfile.sort(() => Math.random() - 0.5);
-        
-        // Slice the first two friends from the shuffled array
-        const selectedBlindDates = shuffledBlindDates.slice(0, 2);
-        
-        // Loop through each friend and fetch their profile
-        selectedBlindDates.forEach((blindDateId) => {
-            fetchBlindDateProfile(blindDateId);
             });
-        setBlindDatesFetched(true);
-        }
-    }, [userProfile.friend, profile.friend, blindDatesFetched]);
+        };
+        
+        // Check if there are friends in the profile
+        if (profile.friend && profile.friend.length > 0 && !friendsFetched) {
+            // Randomize the order of friends
+            const friendListExcludingUserProfile = profile.friend.filter(friend => friend._id !== userProfile._id);
+                console.log(friendListExcludingUserProfile);
+                const shuffledFriends = friendListExcludingUserProfile.sort(() => Math.random() - 0.5);
+
+                // Slice the first two friends from the shuffled array
+                const selectedFriends = shuffledFriends.slice(0, 2);
+        
+                // Loop through each friend and fetch their profile
+                selectedFriends.forEach((friendId) => {
+                fetchFriendProfile(friendId);
+                });
+                setFriendsFetched(true);
+            }
+        }, [profile.friend]);   
+
+    // Function to fetch blind date's profile by ID
+    useEffect(() => { 
+            const fetchBlindDateProfile = (dateId) => {
+                axios
+                    .get(`http://localhost:8000/api/datingapp/profiles/${dateId}`, { withCredentials: true })
+                    .then((res) => {
+                    console.log(res.data);
+                    setBlindDates((prevDates) => [...prevDates, res.data]);
+                    })
+                    .catch((err) => {
+                    console.log(err);
+                    });
+        };
+        // Check if there are friends for dates in the user profile
+        console.log(userProfile.friend);
+        console.log(blindDatesFetched)
+        if (userProfile.friend && userProfile.friend.length > 0 && !blindDatesFetched) {
+            const potentialBlindDateListExcludingFriendProfile = userProfile.friend.filter(friend => friend !== id);
+            console.log(potentialBlindDateListExcludingFriendProfile)
+            // Randomize the order of friends
+            const shuffledBlindDates = potentialBlindDateListExcludingFriendProfile.sort(() => Math.random() - 0.5);
+            
+            // Slice the first two friends from the shuffled array
+            const selectedBlindDates = shuffledBlindDates.slice(0, 2);
+            console.log(selectedBlindDates);
+            // Loop through each friend and fetch their profile
+            selectedBlindDates.forEach((blindDateId) => {
+                fetchBlindDateProfile(blindDateId);
+            });
+            setBlindDatesFetched(true);
+            }
+        }, [profile.friend]);
     
     const addFriend = (e) => {
         e.preventDefault();
@@ -366,7 +366,7 @@ useEffect(() => {
                             Recommend a Blind Date :
                         </h4>
                         {blindDates && blindDates.length > 0 ? (
-                                blindDates.map((blindDate, index) => (
+                                blindDates.slice(0, 2).map((blindDate, index) => (
                                 <div className="flex items-center gap-16" key={index}>
 
                                     {blindDate.pictures && blindDate.pictures.length>0 &&(
@@ -402,7 +402,7 @@ useEffect(() => {
                             My Friends :
                         </h4>
                         {friends && friends.length > 0 ? (
-                                friends.map((friend, index) => (
+                                friends.slice(0, 2).map((friend, index) => (
                                 <div className="flex items-center gap-16" key={index}>
                                     {friend.pictures && friend.pictures.length>0 &&(
                                     <div className="bg-gray-200 w-[180px] h-[150px] rounded-xl flex relative mb-4">
